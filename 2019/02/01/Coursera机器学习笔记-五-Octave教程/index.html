@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"hide","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="转载请注明作者和出处：Coursera机器学习笔记(五) - Octave教程课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   Ocatve 教程基本数学运算12345678910octave-version.exe:1&amp;gt; 5+6ans =  11octave-version.exe:2&amp;gt; 3-2ans =  1octave-ver">
+<meta name="keywords" content="机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coursera机器学习笔记(五) - Octave教程">
+<meta property="og:url" content="https://wsczh.github.io/2019/02/01/Coursera机器学习笔记-五-Octave教程/index.html">
+<meta property="og:site_name" content="Wangsc&#39;s Blog">
+<meta property="og:description" content="转载请注明作者和出处：Coursera机器学习笔记(五) - Octave教程课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   Ocatve 教程基本数学运算12345678910octave-version.exe:1&amp;gt; 5+6ans =  11octave-version.exe:2&amp;gt; 3-2ans =  1octave-ver">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-02-01T10:59:08.648Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Coursera机器学习笔记(五) - Octave教程">
+<meta name="twitter:description" content="转载请注明作者和出处：Coursera机器学习笔记(五) - Octave教程课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   Ocatve 教程基本数学运算12345678910octave-version.exe:1&amp;gt; 5+6ans =  11octave-version.exe:2&amp;gt; 3-2ans =  1octave-ver">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wsczh.github.io/2019/02/01/Coursera机器学习笔记-五-Octave教程/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Coursera机器学习笔记(五) - Octave教程 | Wangsc's Blog</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-136763172-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-136763172-1');
+    }
+  </script>
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1f36baabbf6dee7cc6b7446a41ec5607";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wangsc's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Stay hungry, Stay foolish</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wsczh.github.io/2019/02/01/Coursera机器学习笔记-五-Octave教程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wangsc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Coursera机器学习笔记(五) - Octave教程
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-01 15:57:33 / 修改时间：18:59:08" itemprop="dateCreated datePublished" datetime="2019-02-01T15:57:33+08:00">2019-02-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<p>转载请注明作者和出处：<a href="https://wsczh.github.io/2019/02/01/Coursera%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%94-Octave%E6%95%99%E7%A8%8B/">Coursera机器学习笔记(五) - Octave教程</a><br>课程地址： <a href="https://www.coursera.org/learn/machine-learning/home/info" target="_blank" rel="noopener">Coursera上吴恩达老师的Machine Learning课程</a><br>编者：<a href="https://wsczh.github.io">Wangsc</a> </p>
+<hr>
+<h2 id="Ocatve-教程"><a href="#Ocatve-教程" class="headerlink" title="Ocatve 教程"></a>Ocatve 教程</h2><h5 id="基本数学运算"><a href="#基本数学运算" class="headerlink" title="基本数学运算"></a>基本数学运算</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">octave-version.exe:1&gt; 5+6</span><br><span class="line">ans =  11</span><br><span class="line">octave-version.exe:2&gt; 3-2</span><br><span class="line">ans =  1</span><br><span class="line">octave-version.exe:3&gt; 5*8</span><br><span class="line">ans =  40</span><br><span class="line">octave-version.exe:4&gt; 1/2</span><br><span class="line">ans =  0.50000</span><br><span class="line">octave-version.exe:6&gt; 2^6</span><br><span class="line">ans =  64</span><br></pre></td></tr></table></figure>
+<h5 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">octave-version.exe:1&gt; 1==2</span><br><span class="line">ans = 0</span><br><span class="line">octave-version.exe:2&gt; 1~=2</span><br><span class="line">ans = 1</span><br><span class="line">octave-version.exe:3&gt; 1 &amp;&amp; 0</span><br><span class="line">ans = 0</span><br><span class="line">octave-version.exe:4&gt; 1 || 0</span><br><span class="line">ans = 1</span><br><span class="line">octave-version.exe:5&gt; xor(1,0)</span><br><span class="line">ans = 1</span><br></pre></td></tr></table></figure>
+<h5 id="隐藏左侧Octave版本号"><a href="#隐藏左侧Octave版本号" class="headerlink" title="隐藏左侧Octave版本号"></a>隐藏左侧Octave版本号</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">octave-version.exe:1&gt; PS1(&apos;&gt;&gt; &apos;);</span><br></pre></td></tr></table></figure>
+<h5 id="变量赋值"><a href="#变量赋值" class="headerlink" title="变量赋值"></a>变量赋值</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; a = 1</span><br><span class="line">a =  1</span><br><span class="line">&gt;&gt; b = &apos;hi&apos;;</span><br><span class="line">&gt;&gt; c = (3&gt;=1);</span><br></pre></td></tr></table></figure>
+<h5 id="抑制打印输出"><a href="#抑制打印输出" class="headerlink" title="抑制打印输出"></a>抑制打印输出</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; a = 1</span><br><span class="line">a =  1</span><br><span class="line">&gt;&gt; a = 1;</span><br><span class="line">&gt;&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="圆周率和常数e"><a href="#圆周率和常数e" class="headerlink" title="圆周率和常数e"></a>圆周率和常数e</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; a = pi</span><br><span class="line">a = 3.1416</span><br><span class="line">&gt;&gt; e</span><br><span class="line">ans =  2.7183</span><br></pre></td></tr></table></figure>
+<h5 id="格式化输出："><a href="#格式化输出：" class="headerlink" title="格式化输出："></a>格式化输出：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; disp(sprintf(&apos;6 decimals: %0.6f&apos;, a))</span><br><span class="line">6 decimals: 3.141593</span><br><span class="line">&gt;&gt; disp(sprintf(&apos;6 decimals: %0.2f&apos;, a))</span><br><span class="line">6 decimals: 3.14</span><br></pre></td></tr></table></figure>
+<h5 id="控制数据长短格式"><a href="#控制数据长短格式" class="headerlink" title="控制数据长短格式"></a>控制数据长短格式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; format long </span><br><span class="line">&gt;&gt; a</span><br><span class="line">a =  3.14159265358979</span><br><span class="line">&gt;&gt; format short</span><br><span class="line">&gt;&gt; a</span><br><span class="line">a =  3.1416</span><br></pre></td></tr></table></figure>
+<h5 id="矩阵"><a href="#矩阵" class="headerlink" title="矩阵"></a>矩阵</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; A = [1 2; 3 4; 5 6;] % 赋值</span><br><span class="line">A =</span><br><span class="line">   1   2</span><br><span class="line">   3   4</span><br><span class="line">   5   6</span><br><span class="line">&gt;&gt; ones(2, 3) % 初始化</span><br><span class="line">ans =</span><br><span class="line">   1   1   1</span><br><span class="line">   1   1   1</span><br><span class="line">&gt;&gt; w = zeros(1, 3) % 初始化</span><br><span class="line">w =</span><br><span class="line">   0   0   0</span><br><span class="line">&gt;&gt; I = eye(5) % 单位矩阵</span><br><span class="line">I =</span><br><span class="line">Diagonal Matrix</span><br><span class="line"></span><br><span class="line">   1   0   0   0   0</span><br><span class="line">   0   1   0   0   0</span><br><span class="line">   0   0   1   0   0</span><br><span class="line">   0   0   0   1   0</span><br><span class="line">   0   0   0   0   1</span><br><span class="line">&gt;&gt; A(3, 2)  %矩阵A第3行第2列元素</span><br><span class="line">ans =  6</span><br><span class="line">&gt;&gt; A(:,2)</span><br><span class="line">ans =</span><br><span class="line">   2</span><br><span class="line">   4</span><br><span class="line">   6</span><br><span class="line">&gt;&gt; A([1 3],:)　％矩阵A第1行和第3行的所有元素</span><br><span class="line">ans =</span><br><span class="line">   1   2</span><br><span class="line">   5   6</span><br><span class="line">&gt;&gt; A(:,2) = [10; 11; 12]　％将A第二列替换为[10;11;12]</span><br><span class="line">A =</span><br><span class="line">    1   10</span><br><span class="line">    3   11</span><br><span class="line">    5   12</span><br><span class="line">&gt;&gt; A = [A, [100; 101; 102]]　％在A的最后加上一列</span><br><span class="line">A =</span><br><span class="line">     1    10   100</span><br><span class="line">     3    11   101</span><br><span class="line">     5    12   102</span><br><span class="line">&gt;&gt; A(:)　％将A所有的元素合并成一个列向量</span><br><span class="line">ans =</span><br><span class="line">     1</span><br><span class="line">     3</span><br><span class="line">     5</span><br><span class="line">    10</span><br><span class="line">    11</span><br><span class="line">    12</span><br><span class="line">   100</span><br><span class="line">   101</span><br><span class="line">   102</span><br><span class="line">&gt;&gt; A = [1 2; 3 4; 5 6]；　　％两个矩阵的合并（列合并）</span><br><span class="line">&gt;&gt; B = [7 8; 9 10; 11 12]；</span><br><span class="line">&gt;&gt; C = [A B]</span><br><span class="line">C =</span><br><span class="line">    1    2    7    8</span><br><span class="line">    3    4    9   10</span><br><span class="line">    5    6   11   12</span><br><span class="line">&gt;&gt; D = [A;B]　％两个矩阵的合并</span><br><span class="line">D =</span><br><span class="line">    1    2</span><br><span class="line">    3    4</span><br><span class="line">    5    6</span><br><span class="line">    7    8</span><br><span class="line">    9   10</span><br><span class="line">   11   12</span><br></pre></td></tr></table></figure>
+<h5 id="行向量与列向量"><a href="#行向量与列向量" class="headerlink" title="行向量与列向量"></a>行向量与列向量</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; v = [1 2 3]</span><br><span class="line">v =</span><br><span class="line">   1   2   3</span><br><span class="line">&gt;&gt; v = [1; 2; 3]</span><br><span class="line">v =</span><br><span class="line">   1</span><br><span class="line">   2</span><br><span class="line">   3</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/01/Coursera机器学习笔记-四-正规方程/" rel="next" title="Coursera机器学习笔记(四) - 正规方程">
+                <i class="fa fa-chevron-left"></i> Coursera机器学习笔记(四) - 正规方程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/02/Coursera机器学习笔记-六-逻辑回归/" rel="prev" title="Coursera机器学习笔记(六) - 逻辑回归">
+                Coursera机器学习笔记(六) - 逻辑回归 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+            <a href="/">
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Wangsc">
+            </a>    
+            
+              <p class="site-author-name" itemprop="name">Wangsc</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsczh" title="GitHub &rarr; https://github.com/wsczh" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1998wsc@gmail.com" title="E-Mail &rarr; mailto:1998wsc@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ocatve-教程"><span class="nav-number">1.</span> <span class="nav-text">Ocatve 教程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基本数学运算"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">基本数学运算</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#逻辑运算"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">逻辑运算</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#隐藏左侧Octave版本号"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">隐藏左侧Octave版本号</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#变量赋值"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">变量赋值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#抑制打印输出"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">抑制打印输出</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#圆周率和常数e"><span class="nav-number">1.0.0.6.</span> <span class="nav-text">圆周率和常数e</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#格式化输出："><span class="nav-number">1.0.0.7.</span> <span class="nav-text">格式化输出：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#控制数据长短格式"><span class="nav-number">1.0.0.8.</span> <span class="nav-text">控制数据长短格式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#矩阵"><span class="nav-number">1.0.0.9.</span> <span class="nav-text">矩阵</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#行向量与列向量"><span class="nav-number">1.0.0.10.</span> <span class="nav-text">行向量与列向量</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wangsc</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66300625";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+  <script src="/js/src/js.cookie.js?v=7.0.1"></script>
+  <script src="/js/src/scroll-cookie.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

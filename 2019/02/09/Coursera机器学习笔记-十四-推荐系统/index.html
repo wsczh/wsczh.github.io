@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"hide","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="预测电影评分问题形式化我们从一个例子开始定义推荐系统的问题。假使我们是一个电影供应商，我们有 5 部电影和 4 个用户，我们要求用户为电影打分。前三部电影是爱情片，后两部则是动作片，我们可以看出Alice和Bob似乎更倾向与爱情片， 而 Carol 和 Dave 似乎更倾向与动作片。并且没有一个用户给所有的电影都打过分。我们希望构建一个算法来预测他们每个人可能会给他们没看过的电影打多少分，并以此作">
+<meta name="keywords" content="机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coursera机器学习笔记(十四) - 推荐系统">
+<meta property="og:url" content="https://wsczh.github.io/2019/02/09/Coursera机器学习笔记-十四-推荐系统/index.html">
+<meta property="og:site_name" content="Wangsc&#39;s Blog">
+<meta property="og:description" content="预测电影评分问题形式化我们从一个例子开始定义推荐系统的问题。假使我们是一个电影供应商，我们有 5 部电影和 4 个用户，我们要求用户为电影打分。前三部电影是爱情片，后两部则是动作片，我们可以看出Alice和Bob似乎更倾向与爱情片， 而 Carol 和 Dave 似乎更倾向与动作片。并且没有一个用户给所有的电影都打过分。我们希望构建一个算法来预测他们每个人可能会给他们没看过的电影打多少分，并以此作">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note14-1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note14-2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note14-3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note14-3.png">
+<meta property="og:updated_time" content="2019-02-09T05:24:11.635Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Coursera机器学习笔记(十四) - 推荐系统">
+<meta name="twitter:description" content="预测电影评分问题形式化我们从一个例子开始定义推荐系统的问题。假使我们是一个电影供应商，我们有 5 部电影和 4 个用户，我们要求用户为电影打分。前三部电影是爱情片，后两部则是动作片，我们可以看出Alice和Bob似乎更倾向与爱情片， 而 Carol 和 Dave 似乎更倾向与动作片。并且没有一个用户给所有的电影都打过分。我们希望构建一个算法来预测他们每个人可能会给他们没看过的电影打多少分，并以此作">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note14-1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wsczh.github.io/2019/02/09/Coursera机器学习笔记-十四-推荐系统/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Coursera机器学习笔记(十四) - 推荐系统 | Wangsc's Blog</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-136763172-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-136763172-1');
+    }
+  </script>
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1f36baabbf6dee7cc6b7446a41ec5607";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wangsc's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Stay hungry, Stay foolish</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wsczh.github.io/2019/02/09/Coursera机器学习笔记-十四-推荐系统/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wangsc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Coursera机器学习笔记(十四) - 推荐系统
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-09 11:57:33 / 修改时间：13:24:11" itemprop="dateCreated datePublished" datetime="2019-02-09T11:57:33+08:00">2019-02-09</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="预测电影评分"><a href="#预测电影评分" class="headerlink" title="预测电影评分"></a>预测电影评分</h2><h3 id="问题形式化"><a href="#问题形式化" class="headerlink" title="问题形式化"></a>问题形式化</h3><p>我们从一个例子开始定义推荐系统的问题。<br>假使我们是一个电影供应商，我们有 5 部电影和 4 个用户，我们要求用户为电影打分。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note14-1.png" alt><br>前三部电影是爱情片，后两部则是动作片，我们可以看出Alice和Bob似乎更倾向与爱情片， 而 Carol 和 Dave 似乎更倾向与动作片。并且没有一个用户给所有的电影都打过分。我们希望构建一个算法来预测他们每个人可能会给他们没看过的电影打多少分，并以此作为推荐的依据。</p>
+<p>下面引入一些标记：</p>
+<ul>
+<li>$n_u$ 代表用户的数量</li>
+<li>$n_m$ 代表电影的数量</li>
+<li>$r(i, j)$ 如果用户j给电影 $i$ 评过分则 $r(i,j)=1$</li>
+<li>$y^{(i, j)}$ 代表用户 $j$ 给电影i的评分</li>
+<li>$m_j$代表用户 $j$ 评过分的电影的总数</li>
+</ul>
+<h3 id="基于内容的推荐系统"><a href="#基于内容的推荐系统" class="headerlink" title="基于内容的推荐系统"></a>基于内容的推荐系统</h3><p>在一个基于内容的推荐系统算法中，我们假设对于我们希望推荐的东西有一些数据，这些数据是有关这些东西的特征。</p>
+<p>在我们的例子中，我们可以假设每部电影都有两个特征，如$x_1$代表电影的浪漫程度，$x_2$ 代表电影的动作程度。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note14-2.png" alt></p>
+<p>下面我们要基于这些特征来构建一个推荐系统算法。<br>假设我们采用线性回归模型，我们可以针对每一个用户都训练一个线性回归模型。 于是，我们有：$\theta^{(j)}$ = 用户 $j$ 的参数向量；$x^{(i)}$ = 电影 $i$ 的特征向量。对于用户 $j$ 和电影 $i$，我们预测评分为$(\theta^{(j)})^T x^{(i)}$。例如：<br>$\theta^{1}=\theta^{2}=[0\ 5\ 0]^T$,$\theta^{3}=\theta^{4}=[0\ 0\ 5]^T$,$x_1=[1\ 0.9\ 0]^T$,$x_2=[1 \ 1.0\ 0.01]^T$</p>
+<p><strong>用户 $j$ 的代价函数</strong><br>针对用户 $j$，该线性回归模型的代价为预测误差的平方和，加上正则化项：<br>$$\min_{\theta^{(j)}}\frac{1}{2}\sum_{i:r(i,j)=1}((\theta^{(j)})^T x^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}(\theta_{k}^{(j)})^2$$</p>
+<p>其中 $i:r(i,j)$表示我们只计算那些用户 $j$ 评过分的电影。在一般的线性回归模型中，误差项和正则项应该都是乘以$1/2m$，在这里我们将$m$去掉。并且我们不对方差项$\theta_0$进行正则化处理。 </p>
+<p><strong>所有用户的代价函数</strong><br>上面的代价函数只是针对一个用户的，为了学习所有用户，我们将所有用户的代价函数求和：<br>$$ \min_{\theta^{(1)},…,\theta^{(n_u)}} \frac{1}{2}\sum_{j=1}^{n_u}\sum_{i:r(i,j)=1}\left((\theta^{(j)})^Tx^{(i)}-y^{(i,j)}\right)^2+\frac{\lambda}{2}\sum_{j=1}^{n_u}\sum_{k=1}^{n}(\theta_k^{(j)})^2 $$ </p>
+<p><strong>梯度下降更新公式</strong><br>如果我们要用梯度下降法来求解最优解，我们计算代价函数的偏导数后得到梯度下降的更新公式为： </p>
+<p>$$\begin{align} \theta_k^{(j)}&amp;:=\theta_k^{(j)}-\alpha\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})x_{k}^{(i)} \quad (\text{for}\   k = 0) \ \theta_k^{(j)}&amp;:=\theta_k^{(j)}-\alpha(\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})x_{k}^{(i)}+\lambda\theta_k^{(j)}) \quad (\text{for} \  k\neq 0) \end{align}$$</p>
+<h2 id="协同过滤"><a href="#协同过滤" class="headerlink" title="协同过滤"></a>协同过滤</h2><h3 id="协同过滤-1"><a href="#协同过滤-1" class="headerlink" title="协同过滤"></a>协同过滤</h3><p>在之前的基于内容的推荐系统中，对于每一部电影，我们都掌握了可用的特征，使用这些特征训练出了每一个用户的参数。相反地，如果我们拥有用户的参数，我们可以学习得出电影的特征。</p>
+<p>$$ \mathop{min}\limits_{x^{(1)},…,x^{(n_m)}}\frac{1}{2}\sum_{i=1}^{n_m}\sum_{j{r(i,j)=1}}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{i=1}^{n_m}\sum_{k=1}^{n}(x_k^{(i)})^2 $$ 但是如果我们既没有用户的参数，也没有电影的特征，这两种方法都不可行了。协同过滤算法可以同时学习这两者。</p>
+<p>此时，我们的优化目标便改为同时针对$x$和$\theta$进行。 </p>
+<h3 id="协同过滤算法"><a href="#协同过滤算法" class="headerlink" title="协同过滤算法"></a>协同过滤算法</h3><h4 id="最初协同过滤优化目标"><a href="#最初协同过滤优化目标" class="headerlink" title="最初协同过滤优化目标"></a>最初协同过滤优化目标</h4><ol>
+<li>给定$x^{(1)},…,x^{(n_m)}$，估计$\theta^{(1)},…,\theta^{(n_u)}$： $$ \min_{\theta^{(1)},…,\theta^{(n_u)}}\frac{1}{2}\sum_{j=1}^{n_u}\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{j=1}^{n_u}\sum_{k=1}^{n}(\theta_k^{(j)})^2 $$</li>
+<li>给定$\theta^{(1)},…,\theta^{(n_u)}$，估计$x^{(1)},…,x^{(n_m)}$：$$ \mathop{min}\limits_{x^{(1)},…,x^{(n_m)}}\frac{1}{2}\sum_{i=1}^{n_m}\sum_{j{r(i,j)=1}}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{i=1}^{n_m}\sum_{k=1}^{n}(x_k^{(i)})^2 $$</li>
+<li>重复1，2步，直到变化趋于平缓</li>
+</ol>
+<h4 id="更改后协同过滤优化目标"><a href="#更改后协同过滤优化目标" class="headerlink" title="更改后协同过滤优化目标"></a>更改后协同过滤优化目标</h4><p>更改后的协同过滤优化目标为同时最小化$x^{(1)},…,x^{(n_m)}$和$\theta^{(1)},…,\theta^{(n_u)}$。</p>
+<p><strong>代价函数</strong><br>$$ J(x^{(1)},…x^{(n_m)},\theta^{(1)},…,\theta^{(n_u)})=\ \frac{1}{2}\sum_{(i:j):r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{i=1}^{n_m}\sum_{k=1}^{n}(x_k^{(j)})^2+\frac{\lambda}{2}\sum_{j=1}^{n_u}\sum_{k=1}^{n}(\theta_k^{(j)})^2 $$</p>
+<p><strong>梯度下降公式</strong><br>$$ x_k^{(i)}:=x_k^{(i)}-\alpha\left(\sum_{j:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)}\theta_k^{j}+\lambda x_k^{(i)}\right) $$</p>
+<p>$$ \theta_k^{(i)}:=\theta_k^{(i)}-\alpha\left(\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)}x_k^{(i)}+\lambda \theta_k^{(j)}\right) $$</p>
+<p>注：在协同过滤从算法中，我们通常不使用方差项，如果需要的话，算法会自动学得。 </p>
+<p><strong>协同过滤算法使用步骤</strong></p>
+<ol>
+<li>初始 $x^{(1)},x^{(1)},…x^{(n_m)},\ \theta^{(1)},\theta^{(2)},…,\theta^{(n_u)}$为一些随机小值。(不能初始化为同一个值)</li>
+<li>使用梯度下降算法最小化代价函数</li>
+<li>在训练完算法后，我们预测$(\theta^{(j)})^Tx^{(i)}$为用户 $j$ 给电影 $i$ 的评分</li>
+</ol>
+<p>通过这个学习过程获得的特征矩阵包含了有关电影的重要数据，这些数据不总是人能读懂的，但是我们可以用这些数据作为给用户推荐电影的依据。</p>
+<p>例如，如果一位用户正在观看电影 $x^{(i)}$，我们可以寻找另一部电影$x^{(j)}$，依据两部电影的特征向量之间的距离$\left| {x^{(i)}}-{x^{(j)}} \right|$的大小。</p>
+<h3 id="其他应用"><a href="#其他应用" class="headerlink" title="其他应用"></a>其他应用</h3><ul>
+<li>当给出一件产品时，你能否找到与之相关的其它产品。</li>
+<li>一位用户最近看上一件产品，有没有其它相关的产品，你可以推荐给他。</li>
+</ul>
+<h2 id="电影推荐系统的其他细节"><a href="#电影推荐系统的其他细节" class="headerlink" title="电影推荐系统的其他细节"></a>电影推荐系统的其他细节</h2><p>让我们来看下面的用户评分数据：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note14-3.png" alt><br>如果我们新增一个用户 Eve，并且 Eve 没有为任何电影评分或者全为0，那么我们以什么为依据为Eve推荐电影呢？</p>
+<p>如果我们不进行数据的处理，那么Eve在代价函数中仅仅具有正则项部分。根据优化目标，则Eve对应的$\theta$将是一个全为0的列向量。因此需要对数据进行处理。</p>
+<p>我们首先需要对结果 $Y $矩阵进行均值归一化处理，将每一个用户对某一部电影的评分减去所有用户对该电影评分的平均值：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note14-3.png" alt><br>然后我们利用这个新的 $Y$ 矩阵来训练算法。 如果我们要用新训练出的算法来预测评分，则需要将平均值重新加回去，预测$(\theta^{(j)})^T x^{(i)}+\mu_i$，对于Eve，我们的新模型会认为她给每部电影的评分都是该电影的平均分。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/09/Coursera机器学习笔记-十三-异常检测/" rel="next" title="Coursera机器学习笔记(十三) - 异常检测">
+                <i class="fa fa-chevron-left"></i> Coursera机器学习笔记(十三) - 异常检测
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/09/Coursera机器学习笔记-十五-大规模机器学习/" rel="prev" title="Coursera机器学习笔记(十五) - 大规模机器学习">
+                Coursera机器学习笔记(十五) - 大规模机器学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+            <a href="/">
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Wangsc">
+            </a>    
+            
+              <p class="site-author-name" itemprop="name">Wangsc</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsczh" title="GitHub &rarr; https://github.com/wsczh" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1998wsc@gmail.com" title="E-Mail &rarr; mailto:1998wsc@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#预测电影评分"><span class="nav-number">1.</span> <span class="nav-text">预测电影评分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题形式化"><span class="nav-number">1.1.</span> <span class="nav-text">问题形式化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于内容的推荐系统"><span class="nav-number">1.2.</span> <span class="nav-text">基于内容的推荐系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协同过滤"><span class="nav-number">2.</span> <span class="nav-text">协同过滤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#协同过滤-1"><span class="nav-number">2.1.</span> <span class="nav-text">协同过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协同过滤算法"><span class="nav-number">2.2.</span> <span class="nav-text">协同过滤算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#最初协同过滤优化目标"><span class="nav-number">2.2.1.</span> <span class="nav-text">最初协同过滤优化目标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更改后协同过滤优化目标"><span class="nav-number">2.2.2.</span> <span class="nav-text">更改后协同过滤优化目标</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他应用"><span class="nav-number">2.3.</span> <span class="nav-text">其他应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#电影推荐系统的其他细节"><span class="nav-number">3.</span> <span class="nav-text">电影推荐系统的其他细节</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wangsc</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66300625";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+  <script src="/js/src/js.cookie.js?v=7.0.1"></script>
+  <script src="/js/src/scroll-cookie.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

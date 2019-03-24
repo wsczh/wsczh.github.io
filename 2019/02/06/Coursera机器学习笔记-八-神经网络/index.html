@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"hide","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="转载请注明作者和出处：Coursera机器学习笔记(八) - 神经网络课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   一、为什么要用神经网络当使用$x_1$, $x_2$ 的多次项式进行预测时，线性回归与逻辑回归可以应用的很好。 但若某型有非常多的特征，例如辨别某个图片是否为汽车。假使我们采用的都是50x50像素的小图片，并且我们将所有的像素">
+<meta name="keywords" content="机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coursera机器学习笔记(八) - 神经网络">
+<meta property="og:url" content="https://wsczh.github.io/2019/02/06/Coursera机器学习笔记-八-神经网络/index.html">
+<meta property="og:site_name" content="Wangsc&#39;s Blog">
+<meta property="og:description" content="转载请注明作者和出处：Coursera机器学习笔记(八) - 神经网络课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   一、为什么要用神经网络当使用$x_1$, $x_2$ 的多次项式进行预测时，线性回归与逻辑回归可以应用的很好。 但若某型有非常多的特征，例如辨别某个图片是否为汽车。假使我们采用的都是50x50像素的小图片，并且我们将所有的像素">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-15.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-9.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-10.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-11.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-12.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-13.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-14.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-15.jpg">
+<meta property="og:updated_time" content="2019-02-06T13:12:52.625Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Coursera机器学习笔记(八) - 神经网络">
+<meta name="twitter:description" content="转载请注明作者和出处：Coursera机器学习笔记(八) - 神经网络课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   一、为什么要用神经网络当使用$x_1$, $x_2$ 的多次项式进行预测时，线性回归与逻辑回归可以应用的很好。 但若某型有非常多的特征，例如辨别某个图片是否为汽车。假使我们采用的都是50x50像素的小图片，并且我们将所有的像素">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wsczh.github.io/2019/02/06/Coursera机器学习笔记-八-神经网络/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Coursera机器学习笔记(八) - 神经网络 | Wangsc's Blog</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-136763172-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-136763172-1');
+    }
+  </script>
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1f36baabbf6dee7cc6b7446a41ec5607";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wangsc's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Stay hungry, Stay foolish</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wsczh.github.io/2019/02/06/Coursera机器学习笔记-八-神经网络/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wangsc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Coursera机器学习笔记(八) - 神经网络
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-06 14:50:39 / 修改时间：21:12:52" itemprop="dateCreated datePublished" datetime="2019-02-06T14:50:39+08:00">2019-02-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<p>转载请注明作者和出处：<a href="https://wsczh.github.io/2019/02/06/Coursera%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%85%AB-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/#more">Coursera机器学习笔记(八) - 神经网络</a><br>课程地址： <a href="https://www.coursera.org/learn/machine-learning/home/info" target="_blank" rel="noopener">Coursera上吴恩达老师的Machine Learning课程</a><br>编者：<a href="https://wsczh.github.io">Wangsc</a> </p>
+<hr>
+<h3 id="一、为什么要用神经网络"><a href="#一、为什么要用神经网络" class="headerlink" title="一、为什么要用神经网络"></a>一、为什么要用神经网络</h3><p>当使用$x_1$, $x_2$ 的多次项式进行预测时，线性回归与逻辑回归可以应用的很好。 但若某型有非常多的特征，例如辨别某个图片是否为汽车。假使我们采用的都是50x50像素的小图片，并且我们将所有的像素视为特征，则会有 2500个特征，如果我们要进一步将两两特征组合构成一个多项式模型，则会有约${2500^{2}}/2$个（接近3百万个）特征。普通的逻辑回归模型，不能有效地处理这么多的特征，这时候我们需要神经网络。</p>
+<h3 id="二、神经网络结构表示I"><a href="#二、神经网络结构表示I" class="headerlink" title="二、神经网络结构表示I"></a>二、神经网络结构表示I</h3><p>下图为一个神经元(neuron), 它的输入为$x_1, x_2, x_3$, 有时候为了方便我们添加一个$x_0$, 叫做bias unit. 它的输出为$h(\theta)$. $\theta$也叫做weights.<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-1.jpg" alt><br>我们设计出了类似于神经元的神经网络，效果如下：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-2.png" alt><br>神经网络模型是许多逻辑单元按照不同层级组织起来的网络，每一层的输出变量都是下一层的输入变量。下图为一个3层的神经网络，第一层成为输入层（Input Layer），最后一层称为输出层（Output Layer），中间一层成为隐藏层（Hidden Layers）。我们为每一层都增加一个偏差单位（bias unit）：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-3.jpg" alt><br>下面引入一些标记法来帮助描述模型： $a_i^{(j)}$ 代表第$j$ 层的第 $i$ 个激活单元。${\theta^{(j)}}$代表从第 $j$ 层映射到第$ j+1$ 层时的权重的矩阵，例如${\theta^{(1)}}$代表从第一层映射到第二层的权重的矩阵。其尺寸为：以第 $j+1$层的激活单元数量为行数，以第 $j$ 层的激活单元数加一为列数的矩阵。例如：上图所示的神经网络中${\theta^{(1)}}$的尺寸为 3*4。</p>
+<p>$a_1^{(2)}=g(\Theta_{10}^{(1)}{x_0}+\Theta_{11}^{(1)}{x_1}+\Theta_{12}^{(1)}{x_2}+\Theta_{13}^{(1)}{x_3})$<br>$a_2^{(2)}=g(\Theta_{20}^{(1)}{x_0}+\Theta_{21}^{(1)}{x_1}+\Theta_{22}^{(1)}{x_2}+\Theta_{23}^{(1)}{x_3})$<br>$a_3^{(2)}=g(\Theta_{30}^{(1)}{x_0}+\Theta_{31}^{(1)}{x_1}+\Theta_{32}^{(1)}{x_2}+\Theta_{33}^{(1)}{x_3})$<br>$h_\Theta(x)=g(\Theta_{10}^{(2)}{a_0}^{(2)}+\Theta_{11}^{(2)} a_1^{(2)}+\Theta_{12}^{(2)} a_2^{(2)}+\Theta_{13}^{(2)} a_3^{(2)})$</p>
+<p>我们把这样从左到右的算法称为前向传播算法(FORWARD PROPAGATION)<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-15.jpg" alt></p>
+<h3 id="三、神经网络结构表示Ⅱ"><a href="#三、神经网络结构表示Ⅱ" class="headerlink" title="三、神经网络结构表示Ⅱ"></a>三、神经网络结构表示Ⅱ</h3><p>相对与使用循环来编码，利用向量化的方法会使得计算更为简便。以上面的神经网络为例，试着计算第二层与第三层的值：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-5.png" alt><br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-6.png" alt><br>我们令 ${z^{\left( 2 \right)}}={\theta^{(1)}}x$，则 ${a^{\left( 2 \right)}}=g({z^{(2)}})$ ，计算后添加 $a_0^{\left( 2 \right)}=1$。<br>我们令 ${z^{\left( 3 \right)}}={\theta^{\left( 2 \right)}}{a^{\left( 2 \right)}}$，则 $h_\theta(x)={a^{\left( 3 \right)}}=g({z^{\left( 3 \right)}})$。<br>这只是针对训练集中一个训练实例所进行的计算。如果我们要对整个训练集进行计算，我们需要将训练集特征矩阵进行转置，使得同一个实例的特征都在同一列里。即： ${z^{\left( 2 \right)}}={\Theta^{\left( 1 \right)}}\times {X^T}$</p>
+<h3 id="四、神经网络与逻辑运算"><a href="#四、神经网络与逻辑运算" class="headerlink" title="四、神经网络与逻辑运算"></a>四、神经网络与逻辑运算</h3><h4 id="AND-函数"><a href="#AND-函数" class="headerlink" title="AND 函数"></a>AND 函数</h4><p>$x_1,x_2\in\lbrace0,1\rbrace;\quad y=x_1 AND x_2$<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-7.png" alt><br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-8.png" alt></p>
+<h4 id="OR-函数"><a href="#OR-函数" class="headerlink" title="OR 函数"></a>OR 函数</h4><p>$x_1,x_2\in\lbrace0,1\rbrace;\quad y=x_1 OR x_2$<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-9.png" alt></p>
+<h4 id="NOT-函数"><a href="#NOT-函数" class="headerlink" title="NOT 函数"></a>NOT 函数</h4><p>$x_1\in\lbrace0,1\rbrace;\quad y=NOT x_1$<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-10.jpg" alt></p>
+<h4 id="XNOR-函数"><a href="#XNOR-函数" class="headerlink" title="XNOR 函数"></a>XNOR 函数</h4><p>$x_1,x_2\in\lbrace0,1\rbrace;\quad y=x_1 XNOR x_2$<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-11.jpg" alt></p>
+<h3 id="五、多类分类"><a href="#五、多类分类" class="headerlink" title="五、多类分类"></a>五、多类分类</h3><p>当我们有不止两种分类时（也就是$y=1,2,3….$），比如以下这种情况，该怎么办？如果我们要训练一个神经网络算法来识别路人、汽车、摩托车和卡车，在输出层我们应该有4个值。例如，第一个值为1或0用于预测是否是行人，第二个值用于判断是否为汽车。</p>
+<p>输入向量$x$有三个维度，两个中间层，输出层4个神经元分别用来表示4类，也就是每一个数据在输出层都会出现${\left[ a\text{ }b\text{ }c\text{ }d \right]}^{T}$，且$a,b,c,d$中仅有一个为1，表示当前类。下面是该神经网络的可能结构示例：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-12.jpg" alt><br>神经网络算法的输出结果为四种可能情形之一：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-13.png" alt></p>
+<h3 id="六、代价函数"><a href="#六、代价函数" class="headerlink" title="六、代价函数"></a>六、代价函数</h3><h4 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h4><ul>
+<li>L = 总的层数, 例如下图中L=4; </li>
+<li>$s_l$ = 在第$l$层中unit的个数(不包括bias unit), 如下图中$s_1=3$, $s_2=5$, $s_3=5$, $s_L=4$. </li>
+<li>$K$ = 输出总类个数。要么是二分类(Binary classification)要么是多分类(Multi-class classification). 对于二分类问题, 神经网络只需要一个输出单元; 而对于多分类问题, 需要K个输出单元.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-14.jpg" alt></p>
+<h4 id="代价函数"><a href="#代价函数" class="headerlink" title="代价函数"></a>代价函数</h4><p>逻辑回归问题中我们的代价函数为：<br>$J\left(\theta \right)=-\frac{1}{m}\left[\sum_\limits{i=1}^{m}{y}^{(i)}\log{h_\theta({x}^{(i)})}+\left(1-{y}^{(i)}\right)log\left(1-h_\theta\left({x}^{(i)}\right)\right)\right]+\frac{\lambda}{2m}\sum_\limits{j=1}^{n}{\theta_j}^{2}$</p>
+<p>在神经网络中，我们可以有很多输出变量，我们的$h_\theta(x)$是一个维度为$K$的向量，并且我们训练集中的因变量也是同样维度的一个向量，因此我们的代价函数会比逻辑回归更加复杂一些，为：<br>$$h_\theta\left(x\right)\in \mathbb{R}^{K}\quad\left({h_\theta}\left(x\right)\right)<em>{i}={i}^{th} \text{output}\J(\Theta) = -\frac{1}{m} \left[ \sum\limits</em>{i=1}^{m} \sum\limits_{k=1}^{k} y_k^{(i)} \log {(h_\Theta(x^{(i)}))} + \left( 1 - y_k^{(i)} \right) \log \left( 1- {\left( h_\Theta \left( x^{(i)} \right) \right)} \right) \right] + \frac{\lambda}{2m} \sum\limits_{l=1}^{L-1} \sum\limits_{i=1}^{s_l} \sum\limits_{j=1}^{s_l+1} \left( \Theta_{ji}^{(l)} \right)^2$$<br>这个看起来复杂很多的代价函数背后的思想还是一样的，我们希望通过代价函数来观察算法预测的结果与真实情况的误差有多大，唯一不同的是，对于每一行特征，我们都会给出$K$个预测，基本上我们可以利用循环，对每一行特征都预测$K$个不同结果，然后在利用循环在$K$个预测中选择可能性最高的一个，将其与$y$中的实际数据进行比较。</p>
+<p>正则化的那一项只是排除了每一层$\theta_0$后，每一层的$\theta$ 矩阵的和。最里层的循环$j$循环所有的行（由$s_l$ +1 层的激活单元数决定），循环$i$则循环所有的列，由该层（$s_l$层）的激活单元数所决定。即：$h_\theta(x)$与真实值之间的距离为每个样本-每个类输出的加和，对参数进行regularization的bias项处理所有参数的平方和。</p>
+<h3 id="七、反向传播算法"><a href="#七、反向传播算法" class="headerlink" title="七、反向传播算法"></a>七、反向传播算法</h3><p>现在，为了计算代价函数的偏导数$\frac{\partial}{\partial\Theta^{(l)}_{ij}}J\left(\Theta\right)$，我们需要采用一种反向传播算法，也就是首先计算最后一层的误差，然后再一层一层反向求出各层的误差，直到倒数第二层。 过程如下：</p>
+<p>给定训练集$\lbrace(x^{(1)},y^{(1)})\cdot\cdot\cdot(x^{(m)},y^{(m)})\rbrace$</p>
+<ul>
+<li>设置$\triangle_{i,j}^{(l)}=0 (for \ all \ l,i,j)$<br>For 训练样本 t = 1 to m:</li>
+</ul>
+<ol>
+<li>令$a^{(1)}:=x^{(t)}$</li>
+<li>调用前向传播算法计算$a^{(l)}$，其中$l=1,2,3,…,L$<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note8-15.jpg" alt></li>
+<li>通过$y^{(t)}$，计算$\delta^{(L)}=a^{(L)}-y^{(t)}$</li>
+<li>通过$\delta^{(l)}=\left({\Theta^{(l)}}\right)^{T}\delta^{(l+1)}.\ast g’\left(z^{(l)}\right)$公式，计算$\delta^{(L-1)},\delta^{(L-2)},…,\delta^{(2)}$。其中，$g’(z^{(l)})$是$S$形函数的导数，$g’(z^{(l)})=a^{(l)}\ast(1-a^{(l)})$。</li>
+<li>$\triangle_{i,j}^{(l)}:=\triangle_{i,j}^{(l)}+a_j^{(l)}\delta_i^{(l=1)}$，或者向量化： $\triangle^{(l)}:=\triangle^{(l)}+\delta^{(l=1)}(a^{(l)})^T$</li>
+</ol>
+<p>自此，我们更新$\triangle$矩阵。</p>
+<ul>
+<li>$D_{i,j}^{(l)}:=\frac{1}{m}(\triangle_{i,j}^{(l)}+\lambda\Theta_{i,j}^{(l)}),if\ j=eq0$.</li>
+<li>$D_{i,j}^{(l)}:=\frac{1}{m}\triangle_{i,j}^{(l)},if\ j=0$.</li>
+</ul>
+<p>因此，$\frac{\partial}{\partial\Theta^{(l)}<em>{ij}}J\left(\Theta\right)=D</em>{i,j}^{(l)}$</p>
+<h3 id="随机初始化"><a href="#随机初始化" class="headerlink" title="随机初始化"></a>随机初始化</h3><p>初始所有参数为0，对于逻辑回归来说是可行的，但是对于神经网络来说是不可行的。如果我们令所有的初始参数都为0，这将意味着我们第二层的所有激活单元都会有相同的值。同理，如果我们初始所有的参数都为一个非0的数，结果也是一样的。</p>
+<p>我们通常初始参数为正负ε之间的随机值，假设我们要随机初始一个尺寸为10×11的参数矩阵，代码如下：Theta1 = rand(10, 11) <em> (2</em>eps) – eps</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/02/Coursera机器学习笔记-七-正则化/" rel="next" title="Coursera机器学习笔记(七) - 正则化">
+                <i class="fa fa-chevron-left"></i> Coursera机器学习笔记(七) - 正则化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/07/Coursera机器学习笔记-九-应用机器学习的建议/" rel="prev" title="Coursera机器学习笔记(九) - 应用机器学习的建议">
+                Coursera机器学习笔记(九) - 应用机器学习的建议 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+            <a href="/">
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Wangsc">
+            </a>    
+            
+              <p class="site-author-name" itemprop="name">Wangsc</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsczh" title="GitHub &rarr; https://github.com/wsczh" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1998wsc@gmail.com" title="E-Mail &rarr; mailto:1998wsc@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、为什么要用神经网络"><span class="nav-number">1.</span> <span class="nav-text">一、为什么要用神经网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、神经网络结构表示I"><span class="nav-number">2.</span> <span class="nav-text">二、神经网络结构表示I</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、神经网络结构表示Ⅱ"><span class="nav-number">3.</span> <span class="nav-text">三、神经网络结构表示Ⅱ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、神经网络与逻辑运算"><span class="nav-number">4.</span> <span class="nav-text">四、神经网络与逻辑运算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AND-函数"><span class="nav-number">4.1.</span> <span class="nav-text">AND 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OR-函数"><span class="nav-number">4.2.</span> <span class="nav-text">OR 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NOT-函数"><span class="nav-number">4.3.</span> <span class="nav-text">NOT 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XNOR-函数"><span class="nav-number">4.4.</span> <span class="nav-text">XNOR 函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、多类分类"><span class="nav-number">5.</span> <span class="nav-text">五、多类分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、代价函数"><span class="nav-number">6.</span> <span class="nav-text">六、代价函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一些概念"><span class="nav-number">6.1.</span> <span class="nav-text">一些概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代价函数"><span class="nav-number">6.2.</span> <span class="nav-text">代价函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、反向传播算法"><span class="nav-number">7.</span> <span class="nav-text">七、反向传播算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机初始化"><span class="nav-number">8.</span> <span class="nav-text">随机初始化</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wangsc</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66300625";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+  <script src="/js/src/js.cookie.js?v=7.0.1"></script>
+  <script src="/js/src/scroll-cookie.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

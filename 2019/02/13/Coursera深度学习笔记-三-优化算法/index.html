@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"hide","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Mini-batch 梯度下降这部分内容在学习“Machine Learning”时已经讲过，因此内容不再整理。具体可看Coursera机器学习笔记(十五) - 大规模机器学习 指数加权平均数假定某地区一年的温度图如下。  现在开始计算加权平均数。设$\theta_x,\ v_x$分别是第x天实际温度与加权平均后的温度值，并且$v_0=0, v_{a+1} = 0.9v_a+0.1\theta_a">
+<meta name="keywords" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coursera深度学习笔记(三) - 优化算法">
+<meta property="og:url" content="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-三-优化算法/index.html">
+<meta property="og:site_name" content="Wangsc&#39;s Blog">
+<meta property="og:description" content="Mini-batch 梯度下降这部分内容在学习“Machine Learning”时已经讲过，因此内容不再整理。具体可看Coursera机器学习笔记(十五) - 大规模机器学习 指数加权平均数假定某地区一年的温度图如下。  现在开始计算加权平均数。设$\theta_x,\ v_x$分别是第x天实际温度与加权平均后的温度值，并且$v_0=0, v_{a+1} = 0.9v_a+0.1\theta_a">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-三-优化算法/L2_week2_1.png">
+<meta property="og:image" content="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-三-优化算法/L2_week2_2.png">
+<meta property="og:image" content="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-三-优化算法/L2_week2_3.png">
+<meta property="og:image" content="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-三-优化算法/L2_week2_4.png">
+<meta property="og:image" content="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-三-优化算法/L2_week2_5.png">
+<meta property="og:image" content="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-三-优化算法/L2_week2_6.png">
+<meta property="og:updated_time" content="2019-02-13T09:49:56.949Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Coursera深度学习笔记(三) - 优化算法">
+<meta name="twitter:description" content="Mini-batch 梯度下降这部分内容在学习“Machine Learning”时已经讲过，因此内容不再整理。具体可看Coursera机器学习笔记(十五) - 大规模机器学习 指数加权平均数假定某地区一年的温度图如下。  现在开始计算加权平均数。设$\theta_x,\ v_x$分别是第x天实际温度与加权平均后的温度值，并且$v_0=0, v_{a+1} = 0.9v_a+0.1\theta_a">
+<meta name="twitter:image" content="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-三-优化算法/L2_week2_1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-三-优化算法/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Coursera深度学习笔记(三) - 优化算法 | Wangsc's Blog</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-136763172-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-136763172-1');
+    }
+  </script>
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1f36baabbf6dee7cc6b7446a41ec5607";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wangsc's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Stay hungry, Stay foolish</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-三-优化算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wangsc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Coursera深度学习笔记(三) - 优化算法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-13 15:02:29 / 修改时间：17:49:56" itemprop="dateCreated datePublished" datetime="2019-02-13T15:02:29+08:00">2019-02-13</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Mini-batch-梯度下降"><a href="#Mini-batch-梯度下降" class="headerlink" title="Mini-batch 梯度下降"></a>Mini-batch 梯度下降</h3><p>这部分内容在学习“Machine Learning”时已经讲过，因此内容不再整理。具体可看<br><a href="https://wsczh.github.io/2019/02/09/Coursera%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%8D%81%E4%BA%94-%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/#%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95">Coursera机器学习笔记(十五) - 大规模机器学习</a></p>
+<h3 id="指数加权平均数"><a href="#指数加权平均数" class="headerlink" title="指数加权平均数"></a>指数加权平均数</h3><p>假定某地区一年的温度图如下。</p>
+<p><img src="L2_week2_1.png" alt></p>
+<p>现在开始计算加权平均数。设$\theta_x,\ v_x$分别是第x天实际温度与加权平均后的温度值，并且$v_0=0, v_{a+1} = 0.9v_a+0.1\theta_a$，则会得到如下图，其中红线为加权后得到的曲线。</p>
+<p><img src="L2_week2_2.png" alt></p>
+<p>$\beta$权值对图像变化影响：<br>加权平均$v_{a+1} = \beta v_a+(1-\beta)\theta_a$，代表了当前值为前$\frac{1}{(1 -\beta)}$天的每日温度与当天每日温度的加权值。当$\beta$大时，$v_x$曲线越平缓，越向右移动；反之，越容易波动，越能更快适应温度变化。下图绿色为$\beta=0.98$时的变化曲线。<br><img src="L2_week2_3.png" alt></p>
+<p>指数衰减函数：<br>对$v_{100}$按照公式展开可以得到：<br>$v_{100} = 0.1\theta_{100} + 0.1 \times 0.9 \theta_{99} + 0.1 \times {(0.9)}^{2}\theta_{98} + 0.1 \times {(0.9)}^{3}\theta_{97} + 0.1 \times {(0.9)}^{4}\theta_{96} + \ldots$<br>可以发现每一项的系数从$0.1$开始，到$0.1 \times 0.9$，到$0.1 \times {(0.9)}^{2}$，以此类推，就有了指数衰减函数。</p>
+<p>好处：<br>指数加权平均数公式的好处之一在于，它占用极少内存，电脑内存中只占用一行数字而已，然后把最新数据代入公式$(Repeat:\ \beta v_\theta+(1-\beta)\theta_t)$，不断覆盖就可以了，正因为这个原因，其效率，它基本上只占用一行代码，计算指数加权平均数也只占用单行数字的存储和内存，当然它并不是最好的，也不是最精准的计算平均数的方法。如果你要计算移动窗，你直接算出过去10天的总和，过去50天的总和，除以10和50就好，如此往往会得到更好的估测。但缺点是，如果保存所有最近的温度数据，和过去10天的总和，必须占用更多的内存，执行更加复杂，计算成本也更加高昂。</p>
+<h3 id="指数加权平均的偏差修正"><a href="#指数加权平均的偏差修正" class="headerlink" title="指数加权平均的偏差修正"></a>指数加权平均的偏差修正</h3><p>由于加权平均公式为 $v_{a+1} = \beta v_a+(1-\beta)\theta_a$，因此，在$\beta$比较大，例如为0.98时，$v_1=0.02\theta_1$,$\ v_2=0.0196\theta_1+0.02\theta_2,..$往往会比较小，无法很好的评估该年前两天的温度(如图中紫线)，因此这里进行偏差修正。</p>
+<p><img src="L2_week2_4.png" alt></p>
+<p>修正方法为，对于估测初期，用$\frac{v_t}{1- \beta^{t}}$代替$v_t$，其中t为当前的天数。例如，第二天的温度估测为$\frac{v_{2}}{1- \beta^{t}} =\frac{0.0196\theta_{1} + 0.02\theta_{2}}{0.0396}$。但是当$t$很大的时候，偏差修正几乎没有作用，因此当$t$较大的时候，紫线基本和绿线重合了。</p>
+<h3 id="动量梯度下降法-Gradient-descent-with-Momentum"><a href="#动量梯度下降法-Gradient-descent-with-Momentum" class="headerlink" title="动量梯度下降法(Gradient descent with Momentum)"></a>动量梯度下降法(Gradient descent with Momentum)</h3><p>动量梯度下降法，运行速度几乎总是快于标准的梯度下降算法，简而言之，基本的想法就是计算梯度的指数加权平均数，并利用该梯度更新权重。</p>
+<p>$On\ iteration\ t:$<br>$\quad Compute\ dW, db\ on\ the\ current\ mini-batch$<br>$\quad v_{dW}=\beta v_{dw}+(1-\beta)dW$<br>$\quad v_{db}=\beta v_{db}+(1-\beta)db$<br>$\quad W = W -\alpha v_{dw},\ b=b-\alpha v_{db}$</p>
+<p>这里有两个超参数，学习率$a$以及参数$\beta$，$\beta$控制着指数加权平均数，最常用的值是0.9。当然，$v_{dW}=0,\ v_{db}=0$。也有部分资料省略了$dW,\ db$前的参数$1-\beta$，这也可以，更改后最佳学习率会有所不同。</p>
+<h3 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h3><p>RMSprop的算法，全称是root mean square prop算法，它也可以加速梯度下降。迭代方法如下：<br>$On\ iteration\ t:$<br>$\quad Compute\ dW, db\ on\ the\ current\ mini-batch$<br>$\quad S_{dW}=\beta v_{dw}+(1-\beta)dW^2$<br>$\quad S_{db}=\beta v_{db}+(1-\beta)db^2$<br>$\quad W = W -\alpha \frac{dW}{\sqrt{S_{dW}}}$<br>$\quad b=b-\alpha  \frac{db}{\sqrt{S_{db}}}$</p>
+<p>假如正常的梯度下降过程如图所示：<br><img src="L2_week2_5.png" alt></p>
+<p>算法解释：<br>那么为了更快的接近最佳点，最好是横轴移动更快，纵轴波动更小。为了理解，假设纵轴代表参数$b$，横轴代表参数$W$。通过图片可以看出垂直方向的要比水平方向的大得多，所以斜率在$b$方向特别大，所以这些微分中，$db$较大，$dW$较小，因为函数的倾斜程度，在纵轴上，也就是b方向上要大于在横轴上，也就是$W$方向上。$db$的平方较大，所以$S_{db}$也会较大，而相比之下，$dW$会小一些，亦或$dW$平方会小一些，因此$S_{dW}$会小一些，结果就是纵轴上的更新要被一个较大的数相除，就能消除摆动，而水平方向的更新则被较小的数相除。<br>RMSprop的影响就是你的更新最后会变成这样（绿色线），纵轴方向上摆动较小，而横轴方向继续推进。使用RMSprop梯度下降方法，还可以选择一个更大学习率$a$，然后加快学习，而无须在纵轴上垂直方向偏离。<br>注：用“纵轴代表参数$b$，横轴代表参数$W$”仅仅是对这种算法快速解决问题的解释。</p>
+<p>使用RMSprop梯度下降过程如下：<br><img src="L2_week2_6.png" alt></p>
+<h3 id="Adam-优化算法"><a href="#Adam-优化算法" class="headerlink" title="Adam 优化算法"></a>Adam 优化算法</h3><p>Adam 优化算法是将Momentum与RMSprop结合一起。方法如下：</p>
+<!---$$\displaystyle{V_{dW}=0,S_{dW}=0,V_{db}=0,S_{db}=0\\On\ iteration\ t: \\ \quad\quad Compute\ dW, db\ on\ the\ current\ mini-batch \\ \quad\quad v_{dW}=\beta_1 v_{dw}+(1-\beta_1)dW\quad v_{db}=\beta_1 v_{db}+(1-\beta_1)db \\ \quad\quad S_{dW}=\beta_2 v_{dw}+(1-\beta_2)dW^2\quad S_{db}=\beta_2 v_{db}+(1-\beta_2)db^2 \\ \quad\quad V_{dW}^{correct}=\frac{v_{dw}}{1-\beta_1^t}\quad v_{db}^{correct}=\frac{v_{db}}{1-\beta_1^t} \\ \quad\quad S_{dW}^{correct}=\frac{v_{dw}}{1-\beta_2^t}\quad S_{db}^{correct}=\frac{v_{db}}{1-\beta_2^t} \\ \quad\quad W = W -\alpha \frac{V_{dW}^{correct}}{\sqrt{S_{dW}^{correct}}+\varepsilon } \\ \quad\quad b=b-\alpha  \frac{V_{db}^{correct}}{\sqrt{S_{db}^{correct}}+\varepsilon }}$$-->
+<p>$V_{dW}=0,S_{dW}=0,V_{db}=0,S_{db}=0$<br>$On\ iteration\ t:$<br>$\quad Compute\ dW, db\ on\ the\ current\ mini-batch$<br>$\quad v_{dW}=\beta_1 v_{dw}+(1-\beta_1)dW\quad v_{db}=\beta_1 v_{db}+(1-\beta_1)db$<br>$\quad S_{dW}=\beta_2 v_{dw}+(1-\beta_2)dW^2\quad S_{db}=\beta_2 v_{db}+(1-\beta_2)db^2$<br>$\quad V_{dW}^{correct}=\frac{v_{dw}}{1-\beta_1^t}\quad v_{db}^{correct}=\frac{v_{db}}{1-\beta_1^t}\quad\quad(偏差修正)$<br>$\quad S_{dW}^{correct}=\frac{v_{dw}}{1-\beta_2^t}\quad S_{db}^{correct}=\frac{v_{db}}{1-\beta_2^t}\quad\quad(偏差修正)$<br>$\quad W = W -\alpha \frac{V_{dW}^{correct}}{\sqrt{S_{dW}^{correct}}+\varepsilon }$<br>$\quad b=b-\alpha  \frac{V_{db}^{correct}}{\sqrt{S_{db}^{correct}}+\varepsilon }$</p>
+<p>所有超参数中，学习率$\alpha$需要通过调试获得，$\beta_1$通常为0.9，$\beta_2$通常为0.999，$\varepsilon$没那么重要，算法作者建议为$10^{-8}$。</p>
+<h3 id="学习率衰减"><a href="#学习率衰减" class="headerlink" title="学习率衰减"></a>学习率衰减</h3><p>学习率衰减可以刚开始快速局部最佳值，然后慢慢接近最佳值。学习率公式有很多。</p>
+<ul>
+<li>$a= \frac{1}{1 + decayrate * \text{epoch}\text{-num}}a_{0}$其中decay-rate称为衰减率，epoch-num为代数，$\alpha_{0}$为初始学习率。衰减率也是一个需要调整的超参数。</li>
+<li>$a ={0.95}^{\text{epoch-num}} a_{0}$</li>
+<li>$a =\frac{k}{\sqrt{\text{epoch-num}}}a_{0}$</li>
+<li>$a =\frac{k}{\sqrt{t}}a_{0}$</li>
+</ul>
+<h3 id="局部最优的问题"><a href="#局部最优的问题" class="headerlink" title="局部最优的问题"></a>局部最优的问题</h3><p>对于一个神经网络，剃度为0的点并不是这个图中的局部最优点，实际上是代价函数的零梯度点，通常是鞍点，附近区域为平缓区。该点附近的代价函数类似于马鞍，在某一维度是凸函数，某一维度是凹函数。而局部最优点需要所有维度为凹函数或者凸函数，概率极低。但是处于鞍点时会使得学习变得十分缓慢。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/深度学习/" rel="tag"># 深度学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/12/Coursera深度学习笔记-二-深度学习的实践层面/" rel="next" title="Coursera深度学习笔记(二) - 深度学习的实践层面">
+                <i class="fa fa-chevron-left"></i> Coursera深度学习笔记(二) - 深度学习的实践层面
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/13/Coursera深度学习笔记-四-超参数调试、Batch正则化和程序框架/" rel="prev" title="Coursera深度学习笔记(四) - 超参数调试、Batch正则化和程序框架">
+                Coursera深度学习笔记(四) - 超参数调试、Batch正则化和程序框架 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+            <a href="/">
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Wangsc">
+            </a>    
+            
+              <p class="site-author-name" itemprop="name">Wangsc</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsczh" title="GitHub &rarr; https://github.com/wsczh" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1998wsc@gmail.com" title="E-Mail &rarr; mailto:1998wsc@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mini-batch-梯度下降"><span class="nav-number">1.</span> <span class="nav-text">Mini-batch 梯度下降</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指数加权平均数"><span class="nav-number">2.</span> <span class="nav-text">指数加权平均数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指数加权平均的偏差修正"><span class="nav-number">3.</span> <span class="nav-text">指数加权平均的偏差修正</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动量梯度下降法-Gradient-descent-with-Momentum"><span class="nav-number">4.</span> <span class="nav-text">动量梯度下降法(Gradient descent with Momentum)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RMSprop"><span class="nav-number">5.</span> <span class="nav-text">RMSprop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adam-优化算法"><span class="nav-number">6.</span> <span class="nav-text">Adam 优化算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习率衰减"><span class="nav-number">7.</span> <span class="nav-text">学习率衰减</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局部最优的问题"><span class="nav-number">8.</span> <span class="nav-text">局部最优的问题</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wangsc</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66300625";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+  <script src="/js/src/js.cookie.js?v=7.0.1"></script>
+  <script src="/js/src/scroll-cookie.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

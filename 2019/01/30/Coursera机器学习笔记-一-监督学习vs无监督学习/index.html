@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"hide","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="转载请注明作者和出处：Coursera机器学习笔记(一) - 监督学习vs无监督学习课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   机器学习是什么机器学习并没有一个被广泛认可的定义，Tom Mitchell 曾提出过一个较好的定义。  “A computer program is said to learn from experience">
+<meta name="keywords" content="机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coursera机器学习笔记(一) - 监督学习vs无监督学习">
+<meta property="og:url" content="https://wsczh.github.io/2019/01/30/Coursera机器学习笔记-一-监督学习vs无监督学习/index.html">
+<meta property="og:site_name" content="Wangsc&#39;s Blog">
+<meta property="og:description" content="转载请注明作者和出处：Coursera机器学习笔记(一) - 监督学习vs无监督学习课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   机器学习是什么机器学习并没有一个被广泛认可的定义，Tom Mitchell 曾提出过一个较好的定义。  “A computer program is said to learn from experience">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/MachineLearning/ML-note1-1.png?Expires=1553406907&OSSAccessKeyId=TMP.AQG9SZBbXZZHspyKq1gZodSPWje--hDTdeXG0uArZp7UPAv6TtkJhPEskkYKADAtAhQM764jX2QGVj81zGLXKmM2g4oruwIVAPjnNbh7FSr9TN7Dw-vk26Tr8klX&Signature=br6k7RuKGYTuicduZXJ7P6MSLU4%3D">
+<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note1-2.png">
+<meta property="og:updated_time" content="2019-03-24T05:01:40.519Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Coursera机器学习笔记(一) - 监督学习vs无监督学习">
+<meta name="twitter:description" content="转载请注明作者和出处：Coursera机器学习笔记(一) - 监督学习vs无监督学习课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   机器学习是什么机器学习并没有一个被广泛认可的定义，Tom Mitchell 曾提出过一个较好的定义。  “A computer program is said to learn from experience">
+<meta name="twitter:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/MachineLearning/ML-note1-1.png?Expires=1553406907&OSSAccessKeyId=TMP.AQG9SZBbXZZHspyKq1gZodSPWje--hDTdeXG0uArZp7UPAv6TtkJhPEskkYKADAtAhQM764jX2QGVj81zGLXKmM2g4oruwIVAPjnNbh7FSr9TN7Dw-vk26Tr8klX&Signature=br6k7RuKGYTuicduZXJ7P6MSLU4%3D">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wsczh.github.io/2019/01/30/Coursera机器学习笔记-一-监督学习vs无监督学习/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Coursera机器学习笔记(一) - 监督学习vs无监督学习 | Wangsc's Blog</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-136763172-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-136763172-1');
+    }
+  </script>
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1f36baabbf6dee7cc6b7446a41ec5607";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wangsc's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Stay hungry, Stay foolish</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wsczh.github.io/2019/01/30/Coursera机器学习笔记-一-监督学习vs无监督学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wangsc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Coursera机器学习笔记(一) - 监督学习vs无监督学习
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-30 15:04:26" itemprop="dateCreated datePublished" datetime="2019-01-30T15:04:26+08:00">2019-01-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-24 13:01:40" itemprop="dateModified" datetime="2019-03-24T13:01:40+08:00">2019-03-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<hr>
+<p>转载请注明作者和出处：<a href="https://wsczh.github.io/2019/01/30/Coursera%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%80-%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0vs%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/">Coursera机器学习笔记(一) - 监督学习vs无监督学习</a><br>课程地址： <a href="https://www.coursera.org/learn/machine-learning/home/info" target="_blank" rel="noopener">Coursera上吴恩达老师的Machine Learning课程</a><br>编者：<a href="https://wsczh.github.io">Wangsc</a> </p>
+<hr>
+<h2 id="机器学习是什么"><a href="#机器学习是什么" class="headerlink" title="机器学习是什么"></a>机器学习是什么</h2><p>机器学习并没有一个被广泛认可的定义，Tom Mitchell 曾提出过一个较好的定义。</p>
+<blockquote>
+<p>“A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.” &nbsp;&nbsp;   —— Tom Mitchell<br>一个程序被认为能从经验E中学习，解决任务T，达到性能度量值P，当且仅当，有了经验E后，经过P评判，程序在处理T时的性能有所提升。&nbsp;&nbsp;   —— Tom Mitchell </p>
+</blockquote>
+<p>以下象棋为例，E 是多次下象棋的经验，T 是下象棋的任务，P 是程序赢得下一场游戏的概率。<br>再以邮箱对邮件进行分类为例，E 是多次邮箱账号者对邮件是否为推广邮件的分类经验，T 是邮箱系统对邮件进行自动归类的任务，P 是邮箱系统成功划分邮件类别的概率。</p>
+<p>一般来说，机器学习可以分为两类：监督性学习和非监督性学习。</p>
+<h2 id="监督性学习vs非监督性学习"><a href="#监督性学习vs非监督性学习" class="headerlink" title="监督性学习vs非监督性学习"></a>监督性学习vs非监督性学习</h2><h3 id="监督性学习"><a href="#监督性学习" class="headerlink" title="监督性学习"></a>监督性学习</h3><p>我们继续用上述提到的E、T、P来解释监督性学习。在监督性学习中，对于任务T，我们给定做该任务的经验E，让程序去学习完成任务。</p>
+<p>监督性学习又分为两类：回归问题和分类问题。<br>回归问题可以理解为，判断某个问题是否符合某个变化规律。<br>分类问题可以理解为，某个问题的所有解只有n种可能性。<br>此处继续举例子。</p>
+<h4 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h4><p>假如你想预测房价。一个人从某地收集了一些房价数据。你将这些数据通过坐标轴画出来，其中横轴代表房子的面积，纵轴代表房价。基于这些数据，若你有一套750平方英尺房子想要卖掉，这个房子能卖多少呢？<br><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/MachineLearning/ML-note1-1.png?Expires=1553406907&amp;OSSAccessKeyId=TMP.AQG9SZBbXZZHspyKq1gZodSPWje--hDTdeXG0uArZp7UPAv6TtkJhPEskkYKADAtAhQM764jX2QGVj81zGLXKmM2g4oruwIVAPjnNbh7FSr9TN7Dw-vk26Tr8klX&amp;Signature=br6k7RuKGYTuicduZXJ7P6MSLU4%3D" alt><br>如果我们用一条直线去拟合这些数据，如图中粉线，那么大约可以卖\$150,000。如果我们用二次方程曲线去拟合，如图中蓝线，那么推测大约可以卖接近$200,000。这两个方案中有一个能让房子出售价格更合理。这就是监督学习中回归问题的例子。</p>
+<h4 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h4><p>假如你是医生检测出患者有乳腺肿瘤，而你知道恶性肿瘤有害，而良性肿瘤没没那么大危害。你查看之前所有人的诊断病例，最后得到下图的点图。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note1-2.png" alt><br>其中横轴代表肿瘤大小，纵轴0、1分别代表良性、恶性肿瘤。而粉色箭头为当前患者的肿瘤大小，你进行推测当前患者是良性还是恶性肿瘤。这就是监督学习中分类问题的例子。</p>
+<h3 id="非监督性学习"><a href="#非监督性学习" class="headerlink" title="非监督性学习"></a>非监督性学习</h3><p>上面我们已经介绍了监督性学习的概念。那么什么是非监督性学习？非监督性学习和监督性学习中的分类问题类似，但有不同之处。</p>
+<p>监督性学习的分类问题中数据集给定了分类的标签，例如上述例子中给定良性肿瘤和恶性肿瘤两类。<br>非监督性学习，又称聚类问题，在聚类的时候，并不关心某一类是什么，我们需要实现的目标只是将相似的东西聚到一起。<br>下面将对非监督性学习进行举例。</p>
+<h4 id="谷歌新闻的非监督性学习"><a href="#谷歌新闻的非监督性学习" class="headerlink" title="谷歌新闻的非监督性学习"></a>谷歌新闻的非监督性学习</h4><p>谷歌新闻每天都在收集非常多的网络的新闻内容。它再将这些新闻分组，组成有关联的新闻。所以谷歌新闻做的就是搜索非常多的新闻事件，自动地把它们聚类到一起。所以，这些新闻事件全是同一主题的，所以显示到一起。</p>
+<h4 id="DNA聚类"><a href="#DNA聚类" class="headerlink" title="DNA聚类"></a>DNA聚类</h4><p>收集1，000，000个不同的基因，并找到一种方法将这些基因自动分组，这些基因以某种方式相似或由不同变量相关，如寿命、位置、功能等。</p>
+<h4 id="鸡尾酒会效应"><a href="#鸡尾酒会效应" class="headerlink" title="鸡尾酒会效应"></a>鸡尾酒会效应</h4><p>鸡尾酒会效应是指人的一种听力选择能力，在这种情况下，注意力集中在某一个人的谈话之中而忽略背景中其他的对话或噪音。听者能够将所有的声音分为不同类，并决定哪类是自己关注的。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/31/Coursera机器学习笔记-二-单变量线性回归/" rel="prev" title="Coursera机器学习笔记(二) - 单变量线性回归">
+                Coursera机器学习笔记(二) - 单变量线性回归 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+            <a href="/">
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Wangsc">
+            </a>    
+            
+              <p class="site-author-name" itemprop="name">Wangsc</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsczh" title="GitHub &rarr; https://github.com/wsczh" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1998wsc@gmail.com" title="E-Mail &rarr; mailto:1998wsc@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#机器学习是什么"><span class="nav-number">1.</span> <span class="nav-text">机器学习是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监督性学习vs非监督性学习"><span class="nav-number">2.</span> <span class="nav-text">监督性学习vs非监督性学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#监督性学习"><span class="nav-number">2.1.</span> <span class="nav-text">监督性学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#回归问题"><span class="nav-number">2.1.1.</span> <span class="nav-text">回归问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分类问题"><span class="nav-number">2.1.2.</span> <span class="nav-text">分类问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非监督性学习"><span class="nav-number">2.2.</span> <span class="nav-text">非监督性学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#谷歌新闻的非监督性学习"><span class="nav-number">2.2.1.</span> <span class="nav-text">谷歌新闻的非监督性学习</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNA聚类"><span class="nav-number">2.2.2.</span> <span class="nav-text">DNA聚类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#鸡尾酒会效应"><span class="nav-number">2.2.3.</span> <span class="nav-text">鸡尾酒会效应</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wangsc</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66300625";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+  <script src="/js/src/js.cookie.js?v=7.0.1"></script>
+  <script src="/js/src/scroll-cookie.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -134,13 +134,13 @@
 <meta property="og:site_name" content="Wangsc&#39;s Blog">
 <meta property="og:description" content="转载请注明作者和出处：Coursera机器学习笔记(一) - 监督学习vs无监督学习课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   机器学习是什么机器学习并没有一个被广泛认可的定义，Tom Mitchell 曾提出过一个较好的定义。  “A computer program is said to learn from experience">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/MachineLearning/ML-note1-1.png?Expires=1553406907&OSSAccessKeyId=TMP.AQG9SZBbXZZHspyKq1gZodSPWje--hDTdeXG0uArZp7UPAv6TtkJhPEskkYKADAtAhQM764jX2QGVj81zGLXKmM2g4oruwIVAPjnNbh7FSr9TN7Dw-vk26Tr8klX&Signature=br6k7RuKGYTuicduZXJ7P6MSLU4%3D">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/MachineLearning/ML-note1-1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note1-2.png">
-<meta property="og:updated_time" content="2019-03-24T05:01:40.519Z">
+<meta property="og:updated_time" content="2019-03-24T06:25:35.135Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Coursera机器学习笔记(一) - 监督学习vs无监督学习">
 <meta name="twitter:description" content="转载请注明作者和出处：Coursera机器学习笔记(一) - 监督学习vs无监督学习课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   机器学习是什么机器学习并没有一个被广泛认可的定义，Tom Mitchell 曾提出过一个较好的定义。  “A computer program is said to learn from experience">
-<meta name="twitter:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/MachineLearning/ML-note1-1.png?Expires=1553406907&OSSAccessKeyId=TMP.AQG9SZBbXZZHspyKq1gZodSPWje--hDTdeXG0uArZp7UPAv6TtkJhPEskkYKADAtAhQM764jX2QGVj81zGLXKmM2g4oruwIVAPjnNbh7FSr9TN7Dw-vk26Tr8klX&Signature=br6k7RuKGYTuicduZXJ7P6MSLU4%3D">
+<meta name="twitter:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/MachineLearning/ML-note1-1.png">
 
 
 
@@ -458,7 +458,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-24 13:01:40" itemprop="dateModified" datetime="2019-03-24T13:01:40+08:00">2019-03-24</time>
+                <time title="修改时间：2019-03-24 14:25:35" itemprop="dateModified" datetime="2019-03-24T14:25:35+08:00">2019-03-24</time>
               
             
           </span>
@@ -504,7 +504,7 @@
 <p>一般来说，机器学习可以分为两类：监督性学习和非监督性学习。</p>
 <h2 id="监督性学习vs非监督性学习"><a href="#监督性学习vs非监督性学习" class="headerlink" title="监督性学习vs非监督性学习"></a>监督性学习vs非监督性学习</h2><h3 id="监督性学习"><a href="#监督性学习" class="headerlink" title="监督性学习"></a>监督性学习</h3><p>我们继续用上述提到的E、T、P来解释监督性学习。在监督性学习中，对于任务T，我们给定做该任务的经验E，让程序去学习完成任务。</p>
 <p>监督性学习又分为两类：回归问题和分类问题。<br>回归问题可以理解为，判断某个问题是否符合某个变化规律。<br>分类问题可以理解为，某个问题的所有解只有n种可能性。<br>此处继续举例子。</p>
-<h4 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h4><p>假如你想预测房价。一个人从某地收集了一些房价数据。你将这些数据通过坐标轴画出来，其中横轴代表房子的面积，纵轴代表房价。基于这些数据，若你有一套750平方英尺房子想要卖掉，这个房子能卖多少呢？<br><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/MachineLearning/ML-note1-1.png?Expires=1553406907&amp;OSSAccessKeyId=TMP.AQG9SZBbXZZHspyKq1gZodSPWje--hDTdeXG0uArZp7UPAv6TtkJhPEskkYKADAtAhQM764jX2QGVj81zGLXKmM2g4oruwIVAPjnNbh7FSr9TN7Dw-vk26Tr8klX&amp;Signature=br6k7RuKGYTuicduZXJ7P6MSLU4%3D" alt><br>如果我们用一条直线去拟合这些数据，如图中粉线，那么大约可以卖\$150,000。如果我们用二次方程曲线去拟合，如图中蓝线，那么推测大约可以卖接近$200,000。这两个方案中有一个能让房子出售价格更合理。这就是监督学习中回归问题的例子。</p>
+<h4 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h4><p>假如你想预测房价。一个人从某地收集了一些房价数据。你将这些数据通过坐标轴画出来，其中横轴代表房子的面积，纵轴代表房价。基于这些数据，若你有一套750平方英尺房子想要卖掉，这个房子能卖多少呢？<br><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/MachineLearning/ML-note1-1.png" alt><br>如果我们用一条直线去拟合这些数据，如图中粉线，那么大约可以卖\$150,000。如果我们用二次方程曲线去拟合，如图中蓝线，那么推测大约可以卖接近$200,000。这两个方案中有一个能让房子出售价格更合理。这就是监督学习中回归问题的例子。</p>
 <h4 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h4><p>假如你是医生检测出患者有乳腺肿瘤，而你知道恶性肿瘤有害，而良性肿瘤没没那么大危害。你查看之前所有人的诊断病例，最后得到下图的点图。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note1-2.png" alt><br>其中横轴代表肿瘤大小，纵轴0、1分别代表良性、恶性肿瘤。而粉色箭头为当前患者的肿瘤大小，你进行推测当前患者是良性还是恶性肿瘤。这就是监督学习中分类问题的例子。</p>
 <h3 id="非监督性学习"><a href="#非监督性学习" class="headerlink" title="非监督性学习"></a>非监督性学习</h3><p>上面我们已经介绍了监督性学习的概念。那么什么是非监督性学习？非监督性学习和监督性学习中的分类问题类似，但有不同之处。</p>
 <p>监督性学习的分类问题中数据集给定了分类的标签，例如上述例子中给定良性肿瘤和恶性肿瘤两类。<br>非监督性学习，又称聚类问题，在聚类的时候，并不关心某一类是什么，我们需要实现的目标只是将相似的东西聚到一起。<br>下面将对非监督性学习进行举例。</p>

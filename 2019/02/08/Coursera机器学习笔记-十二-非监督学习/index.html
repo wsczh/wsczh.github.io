@@ -537,7 +537,7 @@
 <ol>
 <li>第一步是均值归一化。我们需要计算出所有特征的均值，然后令 $x_j= x_j-μ_j$。如果特征是在不同的数量级上，我们还需要将其除以标准差 $σ^2$。</li>
 <li>第二步是计算协方差矩阵（covariance matrix）$\Sigma$： $\Sigma=\dfrac {1}{m}\sum^{n}_{i=1}(x^{(i)}) (x^{(i)})^{T}$</li>
-<li>第三步是计算协方差矩阵$Σ$的特征向量（eigenvectors）:<br>在 Octave 里我们可以利用奇异值分解来求解:<code>[U, S, V]= svd(sigma)</code><br>其中$U=\begin{bmatrix}|\quad\quad|\quad\quad\quad|\u^{(1)}\ u^{(2)}\ …\ u^{(n)} \ |\quad\quad|\quad\quad \quad|\end{bmatrix}$是一个具有与数据之间最小投射误差的方向向量构成的矩阵。</li>
+<li>第三步是计算协方差矩阵$Σ$的特征向量（eigenvectors）:<br>在 Octave 里我们可以利用奇异值分解来求解:<code>[U, S, V]= svd(sigma)</code><br>其中$U=\begin{bmatrix}|\quad\quad|\quad\quad\quad|\u^{(1)} u^{(2)} … u^{(n)} \ |\quad\quad|\quad\quad \quad|\end{bmatrix}$是一个具有与数据之间最小投射误差的方向向量构成的矩阵。</li>
 <li>第四步是计算降维后的特征向量$z$。从$U$中选取前$k$个向量，获得一个$n×k$维度的矩阵($U_{reduce}$)，那么新特征向量$z^{(i)}$: $Z=X<em>U_{reduce}</em>$。注，我们不对方差特征进行处理。</li>
 </ol>
 <h4 id="压缩数据的重建"><a href="#压缩数据的重建" class="headerlink" title="压缩数据的重建"></a>压缩数据的重建</h4><p>将数据压缩后，我们可以通过$U_{reduce}$进行数据的重建，重建后的是原有的高维数据近似，其中，重建后的数据用$x_{approx}$表示。有$X_{approx}=Z*U_{reduce}^T$如下图：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note12-8.png" alt></p>
@@ -681,7 +681,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -126,31 +126,37 @@
 
 
 
-  <meta name="description" content="转载请注明作者和出处：Coursera机器学习笔记(七) - 正则化课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   过拟合(overfitting)过拟合是什么对于回归问题，我们需要对模型进行拟合，例如下图中示例。左侧未能拟合很好，属于欠拟合情况。右侧虽然曲线完美拟合训练集，但是不合乎常理，属于过拟合情况，同样，在分类问题中也存在这样的问题。">
-<meta name="keywords" content="机器学习">
+  <meta name="description" content="目标检测目标定位对于汽车自动驾驶系统，对象可能包含：行人c1、汽车c2、摩托车c3和背景pc。这是典型的分类问题。但是若添加定位图片中汽车的位置时，我们可以让神经网络多输出几个的单元，例如汽车的边框。 我们假定图片左上角坐标为(0,0),右下角坐标为(1,1).边界框中心点为(bx,by)，边界框高度为bh，边界框宽度为bw。因此，我们的目标输出y = [pc, c1, c2, c3, bx, b">
+<meta name="keywords" content="深度学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Coursera机器学习笔记(七) - 正则化">
-<meta property="og:url" content="https://wsczh.github.io/2019/02/02/Coursera机器学习笔记-七-正则化/index.html">
+<meta property="og:title" content="Coursera深度学习笔记(七) - 目标检测">
+<meta property="og:url" content="https://wsczh.github.io/2019/03/24/Coursera深度学习笔记-七-目标检测/index.html">
 <meta property="og:site_name" content="Wangsc&#39;s Blog">
-<meta property="og:description" content="转载请注明作者和出处：Coursera机器学习笔记(七) - 正则化课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   过拟合(overfitting)过拟合是什么对于回归问题，我们需要对模型进行拟合，例如下图中示例。左侧未能拟合很好，属于欠拟合情况。右侧虽然曲线完美拟合训练集，但是不合乎常理，属于过拟合情况，同样，在分类问题中也存在这样的问题。">
+<meta property="og:description" content="目标检测目标定位对于汽车自动驾驶系统，对象可能包含：行人c1、汽车c2、摩托车c3和背景pc。这是典型的分类问题。但是若添加定位图片中汽车的位置时，我们可以让神经网络多输出几个的单元，例如汽车的边框。 我们假定图片左上角坐标为(0,0),右下角坐标为(1,1).边界框中心点为(bx,by)，边界框高度为bh，边界框宽度为bw。因此，我们的目标输出y = [pc, c1, c2, c3, bx, b">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-1.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-2.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-3.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-4.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-5.png">
-<meta property="og:updated_time" content="2019-02-03T02:14:32.734Z">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-13.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-14.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-15.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-16.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-17.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-18.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-19.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-20.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-21.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-22.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-23.png">
+<meta property="og:updated_time" content="2019-03-24T11:31:02.194Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Coursera机器学习笔记(七) - 正则化">
-<meta name="twitter:description" content="转载请注明作者和出处：Coursera机器学习笔记(七) - 正则化课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   过拟合(overfitting)过拟合是什么对于回归问题，我们需要对模型进行拟合，例如下图中示例。左侧未能拟合很好，属于欠拟合情况。右侧虽然曲线完美拟合训练集，但是不合乎常理，属于过拟合情况，同样，在分类问题中也存在这样的问题。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-1.jpg">
+<meta name="twitter:title" content="Coursera深度学习笔记(七) - 目标检测">
+<meta name="twitter:description" content="目标检测目标定位对于汽车自动驾驶系统，对象可能包含：行人c1、汽车c2、摩托车c3和背景pc。这是典型的分类问题。但是若添加定位图片中汽车的位置时，我们可以让神经网络多输出几个的单元，例如汽车的边框。 我们假定图片左上角坐标为(0,0),右下角坐标为(1,1).边界框中心点为(bx,by)，边界框高度为bh，边界框宽度为bw。因此，我们的目标输出y = [pc, c1, c2, c3, bx, b">
+<meta name="twitter:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-13.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://wsczh.github.io/2019/02/02/Coursera机器学习笔记-七-正则化/">
+  <link rel="canonical" href="https://wsczh.github.io/2019/03/24/Coursera深度学习笔记-七-目标检测/">
 
 
 
@@ -160,7 +166,7 @@
   };
 </script>
 
-  <title>Coursera机器学习笔记(七) - 正则化 | Wangsc's Blog</title>
+  <title>Coursera深度学习笔记(七) - 目标检测 | Wangsc's Blog</title>
   
 
 
@@ -401,7 +407,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wsczh.github.io/2019/02/02/Coursera机器学习笔记-七-正则化/">
+    <link itemprop="mainEntityOfPage" href="https://wsczh.github.io/2019/03/24/Coursera深度学习笔记-七-目标检测/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wangsc">
@@ -418,7 +424,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Coursera机器学习笔记(七) - 正则化
+          <h1 class="post-title" itemprop="name headline">Coursera深度学习笔记(七) - 目标检测
 
               
             
@@ -444,24 +450,12 @@
                 
               
 
-              <time title="创建时间：2019-02-02 19:46:41" itemprop="dateCreated datePublished" datetime="2019-02-02T19:46:41+08:00">2019-02-02</time>
+              <time title="创建时间：2019-03-24 19:30:39 / 修改时间：19:31:02" itemprop="dateCreated datePublished" datetime="2019-03-24T19:30:39+08:00">2019-03-24</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-02-03 10:14:32" itemprop="dateModified" datetime="2019-02-03T10:14:32+08:00">2019-02-03</time>
               
             
           </span>
@@ -478,7 +472,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
 
                 
                 
@@ -513,22 +507,47 @@
       
 
       
-        <hr>
-<p>转载请注明作者和出处：<a href="https://wsczh.github.io/2019/02/02/Coursera%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%83-%E6%AD%A3%E5%88%99%E5%8C%96/#more">Coursera机器学习笔记(七) - 正则化</a><br>课程地址： <a href="https://www.coursera.org/learn/machine-learning/home/info" target="_blank" rel="noopener">Coursera上吴恩达老师的Machine Learning课程</a><br>编者：<a href="https://wsczh.github.io">Wangsc</a> </p>
-<hr>
-<h2 id="过拟合-overfitting"><a href="#过拟合-overfitting" class="headerlink" title="过拟合(overfitting)"></a>过拟合(overfitting)</h2><h3 id="过拟合是什么"><a href="#过拟合是什么" class="headerlink" title="过拟合是什么"></a>过拟合是什么</h3><p>对于回归问题，我们需要对模型进行拟合，例如下图中示例。左侧未能拟合很好，属于欠拟合情况。右侧虽然曲线完美拟合训练集，但是不合乎常理，属于过拟合情况，<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-1.jpg" alt><br>同样，在分类问题中也存在这样的问题。下图中分别对应欠拟合、拟合很好、过拟合。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-2.jpg" alt></p>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>一般的解决方法有以下两种：</p>
-<ul>
-<li>丢弃一些不能帮助我们正确预测的特征。可以是手工选择保留哪些特征，或者使用一些模型选择的算法来帮忙（例如PCA）</li>
-<li>正则化。 保留所有的特征，但是减少参数的大小</li>
-</ul>
-<h2 id="代价函数"><a href="#代价函数" class="headerlink" title="代价函数"></a>代价函数</h2><p>上面回归问题中，过拟合的模型为：${h_\theta}\left( x \right)={\theta_{0}}+{\theta_{1}}{x_{1}}+{\theta_{2}}{x^{2}}+{\theta_{3}}{x^{3}}+{\theta_{4}}{x^{4}}$。由于高次项导致了过拟合的产生，因此我们需要降低高次项系数的值。而要做的就是修改代价函数，来对${\theta_{3}}$和${\theta_{4}}$ 设置一点惩罚，使得代价函数选择出的${\theta_{3}}$和${\theta_{4}}$ 对预测结果的影响就比之前要小。例如修改后的代价函数如下：<br>$$J(\theta)=\frac{1}{2m}\sum\limits_{i=1}^{m}{(h_\theta(x^{(i)})-y^{(i)})}^2+1000\theta _3^{2}+10000\theta _4^{2}$$</p>
-<p>假如有很多特征，但是不知道其中哪些特征需要惩罚，则对所有特征进行惩罚，并让代价函数最优化的软件来选择这些惩罚的程度。这样的结果是得到了一个较为简单的能防止过拟合问题的假设，其中$\lambda$又称为正则化参数。代价函数如下：<br>$$J(\theta) = \frac{1}{2m}[\sum\limits_{i=1}^{m}{(h_\theta(x^{(i)})-y^{(i)})^2}+\lambda\sum\limits_{j=1}^{n}\theta^2]\quad\theta\in(n+1)\times1矩阵$$</p>
-<p>而对于$\lambda$的选取，也需要进行注意。若正则化参数$\lambda$过大，在求解参数时，为了使代价函数较小，会使得函数中的所有参数最小化，导致模型变为${h_\theta}\left( x \right)={\theta_{0}}$。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-3.jpg" alt></p>
-<h2 id="正则化-regularization"><a href="#正则化-regularization" class="headerlink" title="正则化(regularization)"></a>正则化(regularization)</h2><h3 id="正则化的线性回归模型"><a href="#正则化的线性回归模型" class="headerlink" title="正则化的线性回归模型"></a>正则化的线性回归模型</h3><p>正则化线性回归的代价函数为：<br>$$J(\theta) = \frac{1}{2m}[\sum\limits_{i=1}^{m}{(h_\theta(x^{(i)})-y^{(i)})^2}+\lambda\sum\limits_{j=1}^{n}\theta^2]\quad\theta\in(n+1)\times1矩阵$$</p>
-<h4 id="梯度下降法求解"><a href="#梯度下降法求解" class="headerlink" title="梯度下降法求解"></a>梯度下降法求解</h4><p>若用梯度下降法来令代价函数最小化，则算法分为两种情况：<br>$$\begin{align} Repeat \quad &amp;until \quad convergence \lbrace \ \theta_0:=&amp;\theta_0-a\frac{1}{m}\sum\limits_{i=1}^{m}(h_\theta(x^{(i)})-y^{(i)})x_{0}^{(i)}\ \theta_j:=&amp;\theta_j-a\frac{1}{m}\sum\limits_{i=1}^{m}{(h_\theta(x^{(i)})-y^{(i)})x_{j}^{(i)}}+\frac{\lambda }{m}\theta_j \quad (j\geq1)\ \rbrace\quad&amp;\end{align}$$<br>调整$j=1,2,…,n$ 时的更新式子进行调整可得：<br>$${\theta_j}:={\theta_j}(1-a\frac{\lambda}{m})-a\frac{1}{m}\sum\limits_{i=1}^{m}(h_\theta(x^{(i)})-{y^{(i)}})x_{j}^{(i)}$$</p>
-<h4 id="正规方程求解"><a href="#正规方程求解" class="headerlink" title="正规方程求解"></a>正规方程求解</h4><p>若用正规方程来求解正则化线性回归模型，方法如下：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-4.png" alt></p>
-<h3 id="正则化的逻辑回归模型"><a href="#正则化的逻辑回归模型" class="headerlink" title="正则化的逻辑回归模型"></a>正则化的逻辑回归模型</h3><p>假定逻辑回归模型如下图：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-5.png" alt><br>则也需要给代价函数增加一个正则化表达式，得到代价函数如下式。其中需注意$\theta$是$n+1$x1的矩阵。<br>$$J(\theta)=\frac{1}{m}\sum\limits_{i=1}^{m}[-y^{(i)}\log(h_\theta(x^{(i)}))-(1-y^{(i)})\log(1-h_\theta(x^{(i)}))]+\frac{\lambda}{2m}\sum\limits_{j=1}^{n}{\theta _j^{2}}\quad\theta\in(n+1)*1矩阵$$<br>对其求导，即可得到梯度下降算法为：<br>$$\begin{align} Repeat \quad &amp;until \quad convergence \lbrace \ \theta_0:=&amp;\theta_0-a\frac{1}{m}\sum\limits_{i=1}^{m}(h_\theta(x^{(i)})-y^{(i)})x_{0}^{(i)}\ \theta_j:=&amp;\theta_j-a\frac{1}{m}\sum\limits_{i=1}^{m}{(h_\theta(x^{(i)})-y^{(i)})x_{j}^{(i)}}+\frac{\lambda }{m}\theta_j \quad (j\geq1)\ \rbrace\quad&amp;\end{align}$$<br>虽然看似与正则化的线性回归模型相同，但是逻辑回归模型中${h_\theta}\left( x \right)=g\left( {\theta^T}X \right)$，这需要注意。</p>
+        <h2 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h2><h3 id="目标定位"><a href="#目标定位" class="headerlink" title="目标定位"></a>目标定位</h3><p>对于汽车自动驾驶系统，对象可能包含：行人c1、汽车c2、摩托车c3和背景pc。这是典型的分类问题。但是若添加定位图片中汽车的位置时，我们可以让神经网络多输出几个的单元，例如汽车的边框。</p>
+<p>我们假定图片左上角坐标为(0,0),右下角坐标为(1,1).边界框中心点为(bx,by)，边界框高度为bh，边界框宽度为bw。因此，我们的目标输出y = [pc, c1, c2, c3, bx, by, bh, bw]^T。这里pc=1指代有对象，pc=0指代没有对象。</p>
+<p>神经网络的随时函数简化为每个元素相应差值的平方和。当然，若pc=0，仅仅计算pc与pc’的差值平方。</p>
+<h3 id="基于滑动窗口的目标检测"><a href="#基于滑动窗口的目标检测" class="headerlink" title="基于滑动窗口的目标检测"></a>基于滑动窗口的目标检测</h3><p>滑动窗口进行目标检测就是选择一个窗口，从图片中截取一片区域，并将给卷积神经网络处理，判断是否含有目标对象；之后移动窗口，继续检测，直到图片上每个区域均被检测过。有时候会再次更改窗口大小，继续进行目标检测。</p>
+<p>但是这个方法计算成本较高，因为在图片中剪切太多区域，卷积网络要一个个处理。因此后来提出了一个解决方案，即在卷积层上应用滑动窗口。</p>
+<h3 id="滑动窗口的卷积实现"><a href="#滑动窗口的卷积实现" class="headerlink" title="滑动窗口的卷积实现"></a>滑动窗口的卷积实现</h3><p>为了构建滑动窗口的卷积应用，首先要知道如何把神经网络的全连接层转化为卷积层，即下图中的最后两个全连接层。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-13.png" alt></p>
+<p>对于本例子来说，第一个全连接层，我们可以通过5x5x16的400个通道的过滤器来实现，此时输出的维度就是1x1x400.再添加第二个卷积层，这里用1x1的400个通道的过滤器，下一层的维度就是1x1x400，这其实就是上个网络中的这一全连接层。最后经由1×1过滤器的处理，得到一个softmax激活值，通过卷积网络，我们最终得到这个1×1×4的输出层。</p>
+<p>假定现在有一个测试集图片是16x16x3。那么在实现时，首先先对图片左上角14x14x3的区域运行卷积网络，得到标签；然后依次移动。卷积网络运行了4次，于是输出了4个标签。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-14.png" alt></p>
+<p>可以发现，在做卷积操作时，很多计算都是重复的，因此执行滑动窗口的卷积时，会使得卷积网络在前4层运行前向传播过程中共享很多计算，降低了计算成本。</p>
+<p>所以该卷积操作的原理是我们不需要把输入图像分割成四个子集，分别执行前向传播，而是把它们作为一张图片输入给卷积网络进行计算，其中的公共区域可以共享很多计算，就像这里我们看到的这个4个14×14的方块一样。</p>
+<p>下面我们再看一个更大的图片样本，假如对一个28×28×3的图片应用滑动窗口操作，如果以同样的方式运行前向传播，最后得到8×8×4的结果。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-15.png" alt></p>
+<p>因为最大池化参数为2，相当于以大小为2的步幅在原始图片上应用神经网络。</p>
+<h3 id="Bounding-Box预测"><a href="#Bounding-Box预测" class="headerlink" title="Bounding Box预测"></a>Bounding Box预测</h3><p>滑动窗口法的卷积实现算法效率高，但是仍然存在问题，不能输出最精准的边界框，例如下图。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-16.png" alt></p>
+<p>其中一个能得到更精准边界框的算法是YOLO算法。</p>
+<p>举个例子，输入图像是100x100，在图像上放一个3x3的网格。基本思路是使用图像分类和定位算法，将算法应用到9个格子上。具体点，需要这样定义训练标签：对于9个格子中每一个格子制定一个标签y(即输出向量标准值)，y是8维的，总的输出尺寸是3×3×8。更具体点，例如图中有两个对象，YOLO算法就是取两个对象的中点，然后将这个对象分配给对象中点的格子，然后计算出标签y。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-17.png" alt></p>
+<p>算法的优点在于神经网络可以输出精确的边界框。只要每个格子中对象数目没有超过1个，这个算法应该是没问题的。实践中你可能会使用更精细的19×19网格。网格精细越多，那么多个对象分配到同一个格子得概率就越小。</p>
+<p>需要注意的是，不需要在3x3网格上跑9次算法。相反，这是单次卷积实现，但你使用了一个卷积网络，有很多共享计算步骤，在处理这3×3计算中很多计算步骤是共享的。</p>
+<p>对于边界框，YOLO算法的处理方法是定义当前格子的左上角为(0,0),右下角为(1,1)，而非定义整个图像的左上角与右下角。</p>
+<h3 id="交并比-评判算法"><a href="#交并比-评判算法" class="headerlink" title="交并比-评判算法"></a>交并比-评判算法</h3><p>假如算法得到的边界为紫色框，而实际边界框为红色框，那么此时通过交并比函数来评判对象检测算法。</p>
+<p>交并比(loU)函数：计算两个边界框交集与并集之比，即图中的黄色面积与绿色面积之比。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-18.png" alt></p>
+<p>一般约定，在计算机检测任务中，只要loU≧0.5，那么结果是可以接受的。当然也可以对阈值进行调节。</p>
+<h3 id="非极大值抑制"><a href="#非极大值抑制" class="headerlink" title="非极大值抑制"></a>非极大值抑制</h3><p>到现在学到的对象检测中一个问题是，算法可能会对同一个对象做出多次检测。因此，这里需要用到非极大值抑制，即确保算法对每个对象仅检测一次。</p>
+<p>例如，上面提到的这张图片，如果放上19x19的网格，算法很有可能会出现对同一辆汽车检测出多次。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-19.png" alt></p>
+<p>算法具体过程如下：</p>
+<p>首先找到概率pc最高的检测，从细节上应该是pc乘以c1，c2或c3。例如，现在最高概率为0.9(右侧车辆)，那么认定这个是最可靠的检测，对其高亮标记，表明找到一辆车。然后，逐一审视剩余矩形，所有与该边框与较高交并比的边框输出会被抑制，例如包含右侧车辆的剩余两个概率为0.6与0.7的边框。接下来继续寻找概率pc最高的检测，重复上述过程，直到所有边界框或高亮标记或被抑制。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-20.png" alt><br><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-21.png" alt></p>
+<h3 id="Anchor-Boxes"><a href="#Anchor-Boxes" class="headerlink" title="Anchor Boxes"></a>Anchor Boxes</h3><p>如果一个格子检测出多个对象，需要使用Anchor Boxes方法。</p>
+<p>该方法是在定义类别标签时，不仅仅是y = [pc, c1, c2, c3, bx, by, bh, bw]^T，而是要重复两次或多次，分别代表两个或多个对象，例如下面图中右侧展示。同时定义两个不同形状的anchor box，例如下图左下角，分别用来检测车辆与行人。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-22.png" alt></p>
+<p>但是这种方法在同一个格子有三个对象的情况时处理不好，对于两个对象的anchor box形状一样情况下也处理不好。前者的一个处理方法是网格更详细，例如从3x3网格转变为9x9的网格，这样多个对象在同一方格的概率会变小。</p>
+<h3 id="YOLO算法总结"><a href="#YOLO算法总结" class="headerlink" title="YOLO算法总结"></a>YOLO算法总结</h3><p>首先，假定训练一个算法去检测三种对象，行人、汽车和摩托车，还要显示制定完整的背景类别。这里有3个类别标签。如果要用两个anchor box，那么输出y就是3x3x2x8，其中3x3表示3x3网格，2是anchor box数量，8是向量维度(pc,bx,by,bh,bw,c1,c2,c3)。或者看成3x3x16也可以。要构造训练集，需要遍历9个格子，然后构成对应的目标向量y。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-23.png" alt></p>
+<p>所以先看看编号1格子，里面没有有价值的东西，即对应的y为上图右侧第二列所示。对于编号2格子有车辆，假设有编号3所示边界框，水平方向更长一点。对比编号4的anchor box 1与编号anchor box 2的交并比，后者交并比更高，那么车辆就与向量下部分有关。那么pc1=0，pc2=1，剩余标签值如上图右侧第三列所示。</p>
+<p>所以你这样遍历9个格子，遍历3×3网格的所有位置，你会得到这样一个向量，得到一个16维向量，所以最终输出尺寸就是3×3×16。和之前一样，简单起见，我在这里用的是3×3网格，实践中用的可能是19×19×16，或者需要用到更多的anchor box，可能是19×19×5×8，即19×19×40，用了5个anchor box。这就是训练集，然后你训练一个卷积网络，输入是图片，可能是100×100×3，然后你的卷积网络最后输出尺寸是，在我们例子中是3×3×16或者3×3×2×8。</p>
 
       
     </div>
@@ -552,7 +571,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+            <a href="/tags/深度学习/" rel="tag"># 深度学习</a>
           
         </div>
       
@@ -565,8 +584,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/02/Coursera机器学习笔记-六-逻辑回归/" rel="next" title="Coursera机器学习笔记(六) - 逻辑回归">
-                <i class="fa fa-chevron-left"></i> Coursera机器学习笔记(六) - 逻辑回归
+              <a href="/2019/03/24/Coursera深度学习笔记-六-卷积神经网络/" rel="next" title="Coursera深度学习笔记(六) - 卷积神经网络">
+                <i class="fa fa-chevron-left"></i> Coursera深度学习笔记(六) - 卷积神经网络
               </a>
             
           </div>
@@ -575,8 +594,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/02/06/Coursera机器学习笔记-八-神经网络/" rel="prev" title="Coursera机器学习笔记(八) - 神经网络">
-                Coursera机器学习笔记(八) - 神经网络 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/03/24/Coursera深度学习笔记-八-人脸识别和风格迁移/" rel="prev" title="Coursera深度学习笔记(八) - 人脸识别与风格迁移">
+                Coursera深度学习笔记(八) - 人脸识别与风格迁移 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -756,7 +775,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#过拟合-overfitting"><span class="nav-number">1.</span> <span class="nav-text">过拟合(overfitting)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#过拟合是什么"><span class="nav-number">1.1.</span> <span class="nav-text">过拟合是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">1.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代价函数"><span class="nav-number">2.</span> <span class="nav-text">代价函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则化-regularization"><span class="nav-number">3.</span> <span class="nav-text">正则化(regularization)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#正则化的线性回归模型"><span class="nav-number">3.1.</span> <span class="nav-text">正则化的线性回归模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#梯度下降法求解"><span class="nav-number">3.1.1.</span> <span class="nav-text">梯度下降法求解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正规方程求解"><span class="nav-number">3.1.2.</span> <span class="nav-text">正规方程求解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则化的逻辑回归模型"><span class="nav-number">3.2.</span> <span class="nav-text">正则化的逻辑回归模型</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目标检测"><span class="nav-number">1.</span> <span class="nav-text">目标检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目标定位"><span class="nav-number">1.1.</span> <span class="nav-text">目标定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于滑动窗口的目标检测"><span class="nav-number">1.2.</span> <span class="nav-text">基于滑动窗口的目标检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#滑动窗口的卷积实现"><span class="nav-number">1.3.</span> <span class="nav-text">滑动窗口的卷积实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bounding-Box预测"><span class="nav-number">1.4.</span> <span class="nav-text">Bounding Box预测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交并比-评判算法"><span class="nav-number">1.5.</span> <span class="nav-text">交并比-评判算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非极大值抑制"><span class="nav-number">1.6.</span> <span class="nav-text">非极大值抑制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Anchor-Boxes"><span class="nav-number">1.7.</span> <span class="nav-text">Anchor Boxes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YOLO算法总结"><span class="nav-number">1.8.</span> <span class="nav-text">YOLO算法总结</span></a></li></ol></li></ol></div>
             
 
           </div>

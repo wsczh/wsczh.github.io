@@ -126,31 +126,27 @@
 
 
 
-  <meta name="description" content="转载请注明作者和出处：Coursera机器学习笔记(七) - 正则化课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   过拟合(overfitting)过拟合是什么对于回归问题，我们需要对模型进行拟合，例如下图中示例。左侧未能拟合很好，属于欠拟合情况。右侧虽然曲线完美拟合训练集，但是不合乎常理，属于过拟合情况，同样，在分类问题中也存在这样的问题。">
-<meta name="keywords" content="机器学习">
+  <meta name="description" content="模型错误率与可避免误差贝叶斯最优错误率：在优化模型时，随着数据越来越多，模型越来越大，性能有时候无法超过某个上限，这就是所谓贝叶斯最优错误率。贝叶斯最优错误率一般认为是理论上可能达到的最优错误率。因此，模型的错误率永远不会低于贝叶斯最有错误率。 还有一个标准是人水平的表现，即人对于该问题上的错误率。 在判断模型是否表现很好时，一般与人水平表现进行对比。如果与人水平表现相差较大，则说明模型还有很多可">
+<meta name="keywords" content="深度学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Coursera机器学习笔记(七) - 正则化">
-<meta property="og:url" content="https://wsczh.github.io/2019/02/02/Coursera机器学习笔记-七-正则化/index.html">
+<meta property="og:title" content="Coursera深度学习笔记(五) - 结构化机器学习项目">
+<meta property="og:url" content="https://wsczh.github.io/2019/03/24/Coursera深度学习笔记-五-结构化机器学习项目/index.html">
 <meta property="og:site_name" content="Wangsc&#39;s Blog">
-<meta property="og:description" content="转载请注明作者和出处：Coursera机器学习笔记(七) - 正则化课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   过拟合(overfitting)过拟合是什么对于回归问题，我们需要对模型进行拟合，例如下图中示例。左侧未能拟合很好，属于欠拟合情况。右侧虽然曲线完美拟合训练集，但是不合乎常理，属于过拟合情况，同样，在分类问题中也存在这样的问题。">
+<meta property="og:description" content="模型错误率与可避免误差贝叶斯最优错误率：在优化模型时，随着数据越来越多，模型越来越大，性能有时候无法超过某个上限，这就是所谓贝叶斯最优错误率。贝叶斯最优错误率一般认为是理论上可能达到的最优错误率。因此，模型的错误率永远不会低于贝叶斯最有错误率。 还有一个标准是人水平的表现，即人对于该问题上的错误率。 在判断模型是否表现很好时，一般与人水平表现进行对比。如果与人水平表现相差较大，则说明模型还有很多可">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-1.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-2.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-3.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-4.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-5.png">
-<meta property="og:updated_time" content="2019-02-03T02:14:32.734Z">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note5-1.png">
+<meta property="og:updated_time" content="2019-03-24T11:01:19.964Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Coursera机器学习笔记(七) - 正则化">
-<meta name="twitter:description" content="转载请注明作者和出处：Coursera机器学习笔记(七) - 正则化课程地址： Coursera上吴恩达老师的Machine Learning课程编者：Wangsc   过拟合(overfitting)过拟合是什么对于回归问题，我们需要对模型进行拟合，例如下图中示例。左侧未能拟合很好，属于欠拟合情况。右侧虽然曲线完美拟合训练集，但是不合乎常理，属于过拟合情况，同样，在分类问题中也存在这样的问题。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-1.jpg">
+<meta name="twitter:title" content="Coursera深度学习笔记(五) - 结构化机器学习项目">
+<meta name="twitter:description" content="模型错误率与可避免误差贝叶斯最优错误率：在优化模型时，随着数据越来越多，模型越来越大，性能有时候无法超过某个上限，这就是所谓贝叶斯最优错误率。贝叶斯最优错误率一般认为是理论上可能达到的最优错误率。因此，模型的错误率永远不会低于贝叶斯最有错误率。 还有一个标准是人水平的表现，即人对于该问题上的错误率。 在判断模型是否表现很好时，一般与人水平表现进行对比。如果与人水平表现相差较大，则说明模型还有很多可">
+<meta name="twitter:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note5-1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://wsczh.github.io/2019/02/02/Coursera机器学习笔记-七-正则化/">
+  <link rel="canonical" href="https://wsczh.github.io/2019/03/24/Coursera深度学习笔记-五-结构化机器学习项目/">
 
 
 
@@ -160,7 +156,7 @@
   };
 </script>
 
-  <title>Coursera机器学习笔记(七) - 正则化 | Wangsc's Blog</title>
+  <title>Coursera深度学习笔记(五) - 结构化机器学习项目 | Wangsc's Blog</title>
   
 
 
@@ -401,7 +397,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wsczh.github.io/2019/02/02/Coursera机器学习笔记-七-正则化/">
+    <link itemprop="mainEntityOfPage" href="https://wsczh.github.io/2019/03/24/Coursera深度学习笔记-五-结构化机器学习项目/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wangsc">
@@ -418,7 +414,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Coursera机器学习笔记(七) - 正则化
+          <h1 class="post-title" itemprop="name headline">Coursera深度学习笔记(五) - 结构化机器学习项目
 
               
             
@@ -444,24 +440,12 @@
                 
               
 
-              <time title="创建时间：2019-02-02 19:46:41" itemprop="dateCreated datePublished" datetime="2019-02-02T19:46:41+08:00">2019-02-02</time>
+              <time title="创建时间：2019-03-24 18:03:14 / 修改时间：19:01:19" itemprop="dateCreated datePublished" datetime="2019-03-24T18:03:14+08:00">2019-03-24</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-02-03 10:14:32" itemprop="dateModified" datetime="2019-02-03T10:14:32+08:00">2019-02-03</time>
               
             
           </span>
@@ -478,7 +462,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
 
                 
                 
@@ -513,22 +497,33 @@
       
 
       
-        <hr>
-<p>转载请注明作者和出处：<a href="https://wsczh.github.io/2019/02/02/Coursera%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%83-%E6%AD%A3%E5%88%99%E5%8C%96/#more">Coursera机器学习笔记(七) - 正则化</a><br>课程地址： <a href="https://www.coursera.org/learn/machine-learning/home/info" target="_blank" rel="noopener">Coursera上吴恩达老师的Machine Learning课程</a><br>编者：<a href="https://wsczh.github.io">Wangsc</a> </p>
-<hr>
-<h2 id="过拟合-overfitting"><a href="#过拟合-overfitting" class="headerlink" title="过拟合(overfitting)"></a>过拟合(overfitting)</h2><h3 id="过拟合是什么"><a href="#过拟合是什么" class="headerlink" title="过拟合是什么"></a>过拟合是什么</h3><p>对于回归问题，我们需要对模型进行拟合，例如下图中示例。左侧未能拟合很好，属于欠拟合情况。右侧虽然曲线完美拟合训练集，但是不合乎常理，属于过拟合情况，<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-1.jpg" alt><br>同样，在分类问题中也存在这样的问题。下图中分别对应欠拟合、拟合很好、过拟合。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-2.jpg" alt></p>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>一般的解决方法有以下两种：</p>
-<ul>
-<li>丢弃一些不能帮助我们正确预测的特征。可以是手工选择保留哪些特征，或者使用一些模型选择的算法来帮忙（例如PCA）</li>
-<li>正则化。 保留所有的特征，但是减少参数的大小</li>
-</ul>
-<h2 id="代价函数"><a href="#代价函数" class="headerlink" title="代价函数"></a>代价函数</h2><p>上面回归问题中，过拟合的模型为：${h_\theta}\left( x \right)={\theta_{0}}+{\theta_{1}}{x_{1}}+{\theta_{2}}{x^{2}}+{\theta_{3}}{x^{3}}+{\theta_{4}}{x^{4}}$。由于高次项导致了过拟合的产生，因此我们需要降低高次项系数的值。而要做的就是修改代价函数，来对${\theta_{3}}$和${\theta_{4}}$ 设置一点惩罚，使得代价函数选择出的${\theta_{3}}$和${\theta_{4}}$ 对预测结果的影响就比之前要小。例如修改后的代价函数如下：<br>$$J(\theta)=\frac{1}{2m}\sum\limits_{i=1}^{m}{(h_\theta(x^{(i)})-y^{(i)})}^2+1000\theta _3^{2}+10000\theta _4^{2}$$</p>
-<p>假如有很多特征，但是不知道其中哪些特征需要惩罚，则对所有特征进行惩罚，并让代价函数最优化的软件来选择这些惩罚的程度。这样的结果是得到了一个较为简单的能防止过拟合问题的假设，其中$\lambda$又称为正则化参数。代价函数如下：<br>$$J(\theta) = \frac{1}{2m}[\sum\limits_{i=1}^{m}{(h_\theta(x^{(i)})-y^{(i)})^2}+\lambda\sum\limits_{j=1}^{n}\theta^2]\quad\theta\in(n+1)\times1矩阵$$</p>
-<p>而对于$\lambda$的选取，也需要进行注意。若正则化参数$\lambda$过大，在求解参数时，为了使代价函数较小，会使得函数中的所有参数最小化，导致模型变为${h_\theta}\left( x \right)={\theta_{0}}$。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-3.jpg" alt></p>
-<h2 id="正则化-regularization"><a href="#正则化-regularization" class="headerlink" title="正则化(regularization)"></a>正则化(regularization)</h2><h3 id="正则化的线性回归模型"><a href="#正则化的线性回归模型" class="headerlink" title="正则化的线性回归模型"></a>正则化的线性回归模型</h3><p>正则化线性回归的代价函数为：<br>$$J(\theta) = \frac{1}{2m}[\sum\limits_{i=1}^{m}{(h_\theta(x^{(i)})-y^{(i)})^2}+\lambda\sum\limits_{j=1}^{n}\theta^2]\quad\theta\in(n+1)\times1矩阵$$</p>
-<h4 id="梯度下降法求解"><a href="#梯度下降法求解" class="headerlink" title="梯度下降法求解"></a>梯度下降法求解</h4><p>若用梯度下降法来令代价函数最小化，则算法分为两种情况：<br>$$\begin{align} Repeat \quad &amp;until \quad convergence \lbrace \ \theta_0:=&amp;\theta_0-a\frac{1}{m}\sum\limits_{i=1}^{m}(h_\theta(x^{(i)})-y^{(i)})x_{0}^{(i)}\ \theta_j:=&amp;\theta_j-a\frac{1}{m}\sum\limits_{i=1}^{m}{(h_\theta(x^{(i)})-y^{(i)})x_{j}^{(i)}}+\frac{\lambda }{m}\theta_j \quad (j\geq1)\ \rbrace\quad&amp;\end{align}$$<br>调整$j=1,2,…,n$ 时的更新式子进行调整可得：<br>$${\theta_j}:={\theta_j}(1-a\frac{\lambda}{m})-a\frac{1}{m}\sum\limits_{i=1}^{m}(h_\theta(x^{(i)})-{y^{(i)}})x_{j}^{(i)}$$</p>
-<h4 id="正规方程求解"><a href="#正规方程求解" class="headerlink" title="正规方程求解"></a>正规方程求解</h4><p>若用正规方程来求解正则化线性回归模型，方法如下：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-4.png" alt></p>
-<h3 id="正则化的逻辑回归模型"><a href="#正则化的逻辑回归模型" class="headerlink" title="正则化的逻辑回归模型"></a>正则化的逻辑回归模型</h3><p>假定逻辑回归模型如下图：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note7-5.png" alt><br>则也需要给代价函数增加一个正则化表达式，得到代价函数如下式。其中需注意$\theta$是$n+1$x1的矩阵。<br>$$J(\theta)=\frac{1}{m}\sum\limits_{i=1}^{m}[-y^{(i)}\log(h_\theta(x^{(i)}))-(1-y^{(i)})\log(1-h_\theta(x^{(i)}))]+\frac{\lambda}{2m}\sum\limits_{j=1}^{n}{\theta _j^{2}}\quad\theta\in(n+1)*1矩阵$$<br>对其求导，即可得到梯度下降算法为：<br>$$\begin{align} Repeat \quad &amp;until \quad convergence \lbrace \ \theta_0:=&amp;\theta_0-a\frac{1}{m}\sum\limits_{i=1}^{m}(h_\theta(x^{(i)})-y^{(i)})x_{0}^{(i)}\ \theta_j:=&amp;\theta_j-a\frac{1}{m}\sum\limits_{i=1}^{m}{(h_\theta(x^{(i)})-y^{(i)})x_{j}^{(i)}}+\frac{\lambda }{m}\theta_j \quad (j\geq1)\ \rbrace\quad&amp;\end{align}$$<br>虽然看似与正则化的线性回归模型相同，但是逻辑回归模型中${h_\theta}\left( x \right)=g\left( {\theta^T}X \right)$，这需要注意。</p>
+        <h2 id="模型错误率与可避免误差"><a href="#模型错误率与可避免误差" class="headerlink" title="模型错误率与可避免误差"></a>模型错误率与可避免误差</h2><p>贝叶斯最优错误率：<br>在优化模型时，随着数据越来越多，模型越来越大，性能有时候无法超过某个上限，这就是所谓贝叶斯最优错误率。贝叶斯最优错误率一般认为是理论上可能达到的最优错误率。因此，模型的错误率永远不会低于贝叶斯最有错误率。</p>
+<p>还有一个标准是人水平的表现，即人对于该问题上的错误率。</p>
+<p>在判断模型是否表现很好时，一般与人水平表现进行对比。如果与人水平表现相差较大，则说明模型还有很多可以优化的空间，常常称差值称为可避免误差。</p>
+<h2 id="进行误差分析"><a href="#进行误差分析" class="headerlink" title="进行误差分析"></a>进行误差分析</h2><p>进行错误分析时，在开发集或测试集中找一组错误样本，观察错误标记的样本，统计不同错误类型的错误数量。在这个过程中归纳出新的错误类型，那么就可以知道哪些问题需要被优先解决。</p>
+<p>例如，猫分类器准确率90%，即错误率10%。在测试集有100个样本，其中有30个样本将狗判断成猫，那么可以优先对于该问题进行改进，如何降低该情况出现。但如果仅仅只有5个样本将狗判断成猫，那么该问题就可以延后解决，因为即使该问题有效解决，错误率也仅仅从10%降低到9.5%。</p>
+<p>误差分析也并不是一定处理错误数量最高的类别，也需要考虑处理该类别时性能提高的上限等因素。</p>
+<h2 id="清除标记错误的数据"><a href="#清除标记错误的数据" class="headerlink" title="清除标记错误的数据"></a>清除标记错误的数据</h2><p>深度学习算法对于训练集中随机错误是相当健壮的，但是对系统性错误就没有那么健壮。比如将所有白色狗标记为猫，那么该模型就会出现问题。</p>
+<p>对于是否修正标记出错的样本，建议是如果这些标记错误严重影响了你在开发集上评估算法的能力，即误差分析时标记错误比重较大，那么就应该去花时间修正错误的标签。但是，如果它们没有严重影响到你用开发集评估成本偏差的能力，那么可能就不应该花宝贵的时间去处理。</p>
+<p>若为了更好的解决问题而去选择清除标记错误的数据时，一般同时清除开发集与测试集的数据，目的为了开发集与测试集有相同的分布。而对于训练集数据就没有必要去处理，一是数据量太大，太浪费时间，二是深度网络对随机错误有很高健壮性。</p>
+<h2 id="使用来自不同分布的数据，进行训练和测试"><a href="#使用来自不同分布的数据，进行训练和测试" class="headerlink" title="使用来自不同分布的数据，进行训练和测试"></a>使用来自不同分布的数据，进行训练和测试</h2><p>当在生成一个模型时，有时候会出现样本数量较少情况，例如识别从某APP上传的图片是不是猫。这时候一般会尽可能的获取图片，例如通过爬虫挖掘网页。假定应用样本有1万张，而收集到的图片样本有20万张，但是20万张图片并不完全来自想要的分布，该如何去做？</p>
+<p>较好的方法是用20万张图片样本当作训练集，如果需要的话，再加上5000张应用样本，剩下5000张应用样本平分给开发集与测试集。</p>
+<h2 id="数据分布不匹配时，偏差与方差的分析"><a href="#数据分布不匹配时，偏差与方差的分析" class="headerlink" title="数据分布不匹配时，偏差与方差的分析"></a>数据分布不匹配时，偏差与方差的分析</h2><p>当使用的训练集与开发集数据来自不同分布时，我们不能直接根据偏差与方差判断模型是否拟合较差或过拟合等。也许算法在训练集上做的不错，比如全是高分辨率图片，但是在开发集上由于用户上传的图片分辨率低，可能处理较差。此时，需要添加一个训练-开发集。</p>
+<p>训练-开发集是将训练集数据打乱，分出一部分做训练-开发集，就像开发集和测试集来自同一分布，训练集、训练-开发集也来自同一分布。</p>
+<p>但不同的地方是，现在你只在训练集训练你的神经网络，你不会让神经网络在训练-开发集上跑后向传播。为了进行误差分析，你应该做的是看看分类器在训练集上的误差，训练-开发集上的误差，还有开发集上的误差。</p>
+<p>当训练集错误率较低，训练-开发集与开发集错误率均较高，那么说明神经网络在训练集中表现良好，但无法泛化到来自相同分布的训练-开发集里，它无法很好地泛化推广到来自同一分布，但以前没见过的数据中，所以在这个样本中我们确实有一个方差问题。</p>
+<p>当训练集与训练-开发集错误率较低，但是开发集错误率较高，说明这是由于数据不匹配的问题。</p>
+<p>当训练集与训练-开发集错误率为10%，开发集错误率20%，那么存在两个问题。一是可避免偏差相当高，因为在训练集上表现不好。二是数据不匹配问题很大。</p>
+<h2 id="数据不匹配问题"><a href="#数据不匹配问题" class="headerlink" title="数据不匹配问题"></a>数据不匹配问题</h2><p>当存在数据不匹配问题时，建议做错误分析，试图了解这两个数据分布到底有什么不同，然后看看是否有办法收集更多看起来像开发集的数据作训练。</p>
+<p>例如，对于车辆中语音操纵系统，训练集采用的是语音识别的数据集，但是开发集与测试集采用的是现实中可能含有噪声的数据集。</p>
+<p>其中一种办法是人工数据合成，人工数据合成确实有效。但是注意，在使用人工数据合成时，一定要谨慎，要记住你有可能从所有可能性的空间只选了很小一部分去模拟数据，这会导致学习算法会对该合成的数据过拟合。例如，只用1个小时内的噪声叠加到安静背景下的所有数据集中就有可能产生过拟合。</p>
+<h2 id="快速搭建你的第一个系统，并进行迭代"><a href="#快速搭建你的第一个系统，并进行迭代" class="headerlink" title="快速搭建你的第一个系统，并进行迭代"></a>快速搭建你的第一个系统，并进行迭代</h2><p>如果第一次处理某个新问题，建议第一步先快速建立你的第一个系统，然后迭代。如果你在这个应用程序领域有很多经验，这个建议适用程度要低一些。还有一种情况适应程度更低，当这个领域有很多可以借鉴的学术文献，处理的问题和你要解决的几乎完全相同，所以，比如说，人脸识别就有很多学术文献，如果你尝试搭建一个人脸识别设备，那么可以从现有大量学术文献为基础出发，一开始就搭建比较复杂的系统。</p>
+<h2 id="多任务学习"><a href="#多任务学习" class="headerlink" title="多任务学习"></a>多任务学习</h2><p>假设你在研发无人驾驶车辆，那么你的无人驾驶车可能需要同时检测不同的物体，比如检测行人、车辆、停车标志，还有交通灯各种其他东西。那么对于输入图像可能就不止一个标签y，比如4个标签。</p>
+<p>要训练该神经网络，需要定义神经网络的损失函数，那么单个预测的损失函数可以写为：</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note5-1.png" alt></p>
+<p>这与猫分类器区别在于，这个神经网络需要对4个标签进行求和，而softmax仅仅将单个标签分配给单个样本。</p>
+<p>对于多任务学习来说，也可以处理图像中只有部分物体被标记的情况。对于这样的数据集，仅仅对标签中0、1标签进行求和，忽略未被标记的项。</p>
+<h2 id="端到端的深度学习"><a href="#端到端的深度学习" class="headerlink" title="端到端的深度学习"></a>端到端的深度学习</h2><p>端到端的深度学习，简言之，就是忽略一个问题中多段的处理过程，而采用单个神经网络代替所有过程。但是端到端的深度学习的挑战之一是往往需要大量的数据才能使得系统表现良好。</p>
 
       
     </div>
@@ -552,7 +547,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+            <a href="/tags/深度学习/" rel="tag"># 深度学习</a>
           
         </div>
       
@@ -565,8 +560,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/02/Coursera机器学习笔记-六-逻辑回归/" rel="next" title="Coursera机器学习笔记(六) - 逻辑回归">
-                <i class="fa fa-chevron-left"></i> Coursera机器学习笔记(六) - 逻辑回归
+              <a href="/2019/02/13/Coursera深度学习笔记-四-超参数调试、Batch正则化和程序框架/" rel="next" title="Coursera深度学习笔记(四) - 超参数调试、Batch正则化和程序框架">
+                <i class="fa fa-chevron-left"></i> Coursera深度学习笔记(四) - 超参数调试、Batch正则化和程序框架
               </a>
             
           </div>
@@ -575,8 +570,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/02/06/Coursera机器学习笔记-八-神经网络/" rel="prev" title="Coursera机器学习笔记(八) - 神经网络">
-                Coursera机器学习笔记(八) - 神经网络 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/03/24/Coursera深度学习笔记-六-卷积神经网络/" rel="prev" title="Coursera深度学习笔记(六) - 卷积神经网络">
+                Coursera深度学习笔记(六) - 卷积神经网络 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -756,7 +751,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#过拟合-overfitting"><span class="nav-number">1.</span> <span class="nav-text">过拟合(overfitting)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#过拟合是什么"><span class="nav-number">1.1.</span> <span class="nav-text">过拟合是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">1.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代价函数"><span class="nav-number">2.</span> <span class="nav-text">代价函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则化-regularization"><span class="nav-number">3.</span> <span class="nav-text">正则化(regularization)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#正则化的线性回归模型"><span class="nav-number">3.1.</span> <span class="nav-text">正则化的线性回归模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#梯度下降法求解"><span class="nav-number">3.1.1.</span> <span class="nav-text">梯度下降法求解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正规方程求解"><span class="nav-number">3.1.2.</span> <span class="nav-text">正规方程求解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则化的逻辑回归模型"><span class="nav-number">3.2.</span> <span class="nav-text">正则化的逻辑回归模型</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型错误率与可避免误差"><span class="nav-number">1.</span> <span class="nav-text">模型错误率与可避免误差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进行误差分析"><span class="nav-number">2.</span> <span class="nav-text">进行误差分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#清除标记错误的数据"><span class="nav-number">3.</span> <span class="nav-text">清除标记错误的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用来自不同分布的数据，进行训练和测试"><span class="nav-number">4.</span> <span class="nav-text">使用来自不同分布的数据，进行训练和测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据分布不匹配时，偏差与方差的分析"><span class="nav-number">5.</span> <span class="nav-text">数据分布不匹配时，偏差与方差的分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据不匹配问题"><span class="nav-number">6.</span> <span class="nav-text">数据不匹配问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速搭建你的第一个系统，并进行迭代"><span class="nav-number">7.</span> <span class="nav-text">快速搭建你的第一个系统，并进行迭代</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多任务学习"><span class="nav-number">8.</span> <span class="nav-text">多任务学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端到端的深度学习"><span class="nav-number">9.</span> <span class="nav-text">端到端的深度学习</span></a></li></ol></div>
             
 
           </div>

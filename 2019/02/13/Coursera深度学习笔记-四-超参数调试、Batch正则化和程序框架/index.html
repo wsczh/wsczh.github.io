@@ -134,12 +134,12 @@
 <meta property="og:site_name" content="Wangsc&#39;s Blog">
 <meta property="og:description" content="超参数调试调试处理一般进行调试处理时有两种方法：  当参数数量相对较少时，可以尝试选取所有的可调式值。 由粗到细的策略。随机选取后，发现效果较好的值后，更新选取范围为该值附近。  但是，随机取值并不是在有效范围内的随机均匀取值，常用的是用对数标尺搜索超参数。 例如，学习率$\alpha$的搜索范围为0.0001 ~ 1，那么用对数标尺搜索就可以将范围更新为-4 ~ 0，此时再进行随机均匀取值。在P">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-四-超参数调试、Batch正则化和程序框架/L2_week3_1.jpg">
-<meta property="og:updated_time" content="2019-03-24T09:44:46.523Z">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note4-1.jpg">
+<meta property="og:updated_time" content="2019-03-24T10:07:12.508Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Coursera深度学习笔记(四) - 超参数调试、Batch正则化和程序框架">
 <meta name="twitter:description" content="超参数调试调试处理一般进行调试处理时有两种方法：  当参数数量相对较少时，可以尝试选取所有的可调式值。 由粗到细的策略。随机选取后，发现效果较好的值后，更新选取范围为该值附近。  但是，随机取值并不是在有效范围内的随机均匀取值，常用的是用对数标尺搜索超参数。 例如，学习率$\alpha$的搜索范围为0.0001 ~ 1，那么用对数标尺搜索就可以将范围更新为-4 ~ 0，此时再进行随机均匀取值。在P">
-<meta name="twitter:image" content="https://wsczh.github.io/2019/02/13/Coursera深度学习笔记-四-超参数调试、Batch正则化和程序框架/L2_week3_1.jpg">
+<meta name="twitter:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note4-1.jpg">
 
 
 
@@ -457,7 +457,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-24 17:44:46" itemprop="dateModified" datetime="2019-03-24T17:44:46+08:00">2019-03-24</time>
+                <time title="修改时间：2019-03-24 18:07:12" itemprop="dateModified" datetime="2019-03-24T18:07:12+08:00">2019-03-24</time>
               
             
           </span>
@@ -523,7 +523,7 @@
 <li>第一种：一次只关注一种超参数，若当天效果很好，第二天关注另一种超参数…若某天效果不好，则回到前一天的状态，重新调整当前超参数。一般数据太多，试验大量模型太困难时采用。</li>
 <li>第二种：同时试验多种模型，最后选择运行较好的模型。有足够多的计算机去平行试验许多模型时采用。</li>
 </ul>
-<p><img src="L2_week3_1.jpg" alt></p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note4-1.jpg" alt></p>
 <h2 id="Batch归一化-Batch-Norm"><a href="#Batch归一化-Batch-Norm" class="headerlink" title="Batch归一化(Batch Norm)"></a>Batch归一化(Batch Norm)</h2><h3 id="归一化网络的激活函数"><a href="#归一化网络的激活函数" class="headerlink" title="归一化网络的激活函数"></a>归一化网络的激活函数</h3><p>Batch归一化(Batch Norm)是将神经网络中的$Z$进行归一化，方法与之前对输入层归一化类似。这会使参数搜索问题变得容易，使神经网络对超参数的选择更加稳定，超参数的范围会更加庞大，工作效果也很好，也会使训练更加容易，甚至是深层网络。当然也有人选择归一化$A$，此处不做讨论。</p>
 <p>$\mu=\frac{1}{m}\sum_i Z^{(i)}$<br>$\sigma^2=\frac{1}{m}\sum_i(Z^{(i)}-\mu)^2$<br>$Z_{norm}^{(i)}=\frac{Z^{(i)}-\mu}{\sqrt{\sigma^2+\varepsilon}} (\varepsilon$是防止$\sigma=0)$<br>$\tilde{Z}^{(i)} = \gamma Z_{norm}^{(i)} +\beta$<br>注：这里的$\beta$与加权中用到的$\beta$无关。</p>
 <p>$\gamma$和$\beta$的作用是，可以随意设置${\tilde{z}}^{(i)}$的平均值。例如，如果$\gamma= \sqrt{\sigma^{2} +\varepsilon}$（$z_{\text{norm}}^{(i)} = \frac{z^{(i)} -\mu}{\sqrt{\sigma^{2} +\varepsilon}}$中的分母），$\beta$等于$\mu$，那么${\tilde{z}}^{(i)} = z^{(i)}$。再举个例子，比如对于激活函数来说，可以通过改变$\gamma$与$\beta$来改变$Z$的集中范围，改变模型。</p>
@@ -586,6 +586,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/24/Coursera深度学习笔记-五-结构化机器学习项目/" rel="prev" title="Coursera深度学习笔记(五) - 结构化机器学习项目">
+                Coursera深度学习笔记(五) - 结构化机器学习项目 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -658,7 +662,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

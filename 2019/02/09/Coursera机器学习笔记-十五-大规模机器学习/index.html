@@ -503,10 +503,10 @@
 <p>因此在训练一个模型前，首先需要检查大规模的训练集是否真的必要，即通过学习曲线判断模型是高方差还是高偏差。</p>
 <h3 id="随机梯度下降法"><a href="#随机梯度下降法" class="headerlink" title="随机梯度下降法"></a>随机梯度下降法</h3><p>如果我们一定需要一个大规模的训练集，我们可以尝试使用随机梯度下降法来代替批量梯度下降法。</p>
 <p>随机梯度下降算法在每一次计算之后便更新参数 $\theta$ ，而不需要首先将所有的训练集求和，在梯度下降算法还没有完成一次迭代时，随机梯度下降算法便已经走出了很远。但是这样的算法存在的问题是，不是每一步都是朝着”正确”的方向迈出的。因此算法虽然会逐渐走向全局最小值的位置，但是可能无法站到那个最小值的那一点，而是在最小值点附近徘徊。</p>
-<p>随机梯度下降迭代过程：<br>${Repeat\ (usually\ repeat\ between\ 1-10)}\lbrace$<br>$\quad for\ \ i\ :=1,…,m\lbrace$<br>$\quad\quad\theta_j:=\theta_j-\alpha(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}$<br>$\quad\quad(for\ j=0,..,n)$<br>$\quad\rbrace$<br>$\rbrace$</p>
+<p>随机梯度下降迭代过程：<br>${Repeat (usually repeat between 1-10)}\lbrace$<br>$\quad for  i :=1,…,m\lbrace$<br>$\quad\quad\theta_j:=\theta_j-\alpha(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}$<br>$\quad\quad(for j=0,..,n)$<br>$\quad\rbrace$<br>$\rbrace$</p>
 <p>$\theta$变化过程如下图所示：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note15-1.jpg" alt></p>
 <h3 id="小批量梯度下降"><a href="#小批量梯度下降" class="headerlink" title="小批量梯度下降"></a>小批量梯度下降</h3><p>小批量梯度下降算法是介于批量梯度下降算法和随机梯度下降算法之间的算法，每计算常数$b$次训练实例，便更新一次参数 $\theta$ 。 </p>
-<p>假定每计算 $b=10$ 次训练实例变更新一次参数 $\theta$，其中训练集总个数为 $m=1000$。<br>${Repeat}\lbrace$<br>$\quad for\ \ i\ :=1,11,21,31,…,991\lbrace$<br>$\quad\quad\theta_j:=\theta_j-\alpha\frac{1}{10}\sum_{k=i}^{i+9}(h_\theta(x^{(k)})-y^{(k)})x_j^{(k)}$<br>$\quad\quad(for\ j=0,..,n)$<br>$\quad\rbrace$<br>$\rbrace$</p>
+<p>假定每计算 $b=10$ 次训练实例变更新一次参数 $\theta$，其中训练集总个数为 $m=1000$。<br>${Repeat}\lbrace$<br>$\quad for  i :=1,11,21,31,…,991\lbrace$<br>$\quad\quad\theta_j:=\theta_j-\alpha\frac{1}{10}\sum_{k=i}^{i+9}(h_\theta(x^{(k)})-y^{(k)})x_j^{(k)}$<br>$\quad\quad(for j=0,..,n)$<br>$\quad\rbrace$<br>$\rbrace$</p>
 <p>通常我们会令 $b$ 在 2-100 之间。这样做的好处在于，我们可以用向量化的方式来循环 $b$个训练实例，如果我们用的线性代数函数库比较好，能够支持平行处理，那么算法的总体表现将不受影响（与随机梯度下降相同）。</p>
 <h3 id="随机梯度下降收敛"><a href="#随机梯度下降收敛" class="headerlink" title="随机梯度下降收敛"></a>随机梯度下降收敛</h3><p>在我们介绍随机梯度下降算法的调试，以及学习率 $α$ 的选取。</p>
 <p>在批量梯度下降中，我们可以令代价函数$J$为迭代次数的函数，绘制图表，根据图表来判断梯度下降是否收敛。但是，在大规模的训练集的情况下，这是不现实的，因为计算代价太大了。</p>
@@ -521,7 +521,7 @@
 <p>随着我们不断地靠近全局最小值，通过减小学习率，我们迫使算法收敛而非在最小值附近徘徊。 但是通常我们不需要这样做便能有非常好的效果了，对$α$进行调整参数所耗费的计算通常不值得。</p>
 <h3 id="在线学习"><a href="#在线学习" class="headerlink" title="在线学习"></a>在线学习</h3><p>今天，许多大型网站或者许多大型网络公司，使用不同版本的在线学习机制算法，从大批的涌入又离开网站的用户身上进行学习。</p>
 <p>在线学习的算法与随机梯度下降算法有些类似，我们对单一的实例进行学习，而非对一个提前定义的训练集进行循环。 迭代过程如下：</p>
-<p>$Repeat\ forever\ (as\ long\ as\ the\ website\ is\ running)\ \lbrace$<br>$\quad Get\ (x,y)\ corresponding\ to\ the\ current\ user$​<br>$\quad Update\ \theta\ using\ (x,y):\lbrace$<br>$\quad\quad\theta_j:=\theta_j-\alpha(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}$<br>$\quad\quad(for\ j=0,..,n)$<br>$\quad\rbrace$<br>$\rbrace$</p>
+<p>$Repeat forever (as long as the website is running) \lbrace$<br>$\quad Get (x,y) corresponding to the current user$​<br>$\quad Update \theta using (x,y):\lbrace$<br>$\quad\quad\theta_j:=\theta_j-\alpha(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}$<br>$\quad\quad(for j=0,..,n)$<br>$\quad\rbrace$<br>$\rbrace$</p>
 <p>一旦对一个数据的学习完成了，我们便可以丢弃该数据，不需要再存储它了。这种方式的好处在于，我们的算法可以很好的适应用户的倾向性，算法可以针对用户的当前行为不断地更新模型以适应该用户。</p>
 <h3 id="映射化简和数据并行"><a href="#映射化简和数据并行" class="headerlink" title="映射化简和数据并行"></a>映射化简和数据并行</h3><p>映射化简和数据并行对于大规模机器学习问题而言是非常重要的概念。之前提到，如果我们用批量梯度下降算法来求解大规模数据集的最优解，我们需要对整个训练集进行循环，计算偏导数和代价，再求和，计算代价非常大。如果我们能够将我们的数据集分配给不多台计算机，让每一台计算机处理数据集的一个子集，然后我们将计所的结果汇总在求和。这样的方法叫做映射简化。</p>
 <p>具体而言，如果任何学习算法能够表达为，对训练集的函数的求和，那么便能将这个任务分配给多台计算机（或者同一台计算机的不同CPU 核心），以达到加速处理的目的。</p>
@@ -647,7 +647,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

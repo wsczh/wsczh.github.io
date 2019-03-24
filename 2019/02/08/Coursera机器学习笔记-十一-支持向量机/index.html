@@ -507,7 +507,7 @@
       
         <h3 id="一、支持向量机"><a href="#一、支持向量机" class="headerlink" title="一、支持向量机"></a>一、支持向量机</h3><h4 id="代价函数"><a href="#代价函数" class="headerlink" title="代价函数"></a>代价函数</h4><p>逻辑回归中，我们知道，若$y=1$，我们希望$h_\theta(x)\approx1,\theta^Tx\gg0$; 若$y=0$，我们希望$h_\theta(x)\approx0,\theta^Tx\ll0$.<br>我们将$h_\theta(x)$表达式带入代价函数中，得到下式，其中省略了代价函数的系数与正则项：<br>$$-y\log{\frac{1}{1+e^{-\theta^Tx}}}-(1-y)\log(1-\frac{1}{1+e^{-\theta^Tx}})$$<br>对于$-\log{\frac{1}{1+e^{-z}}}$与$-\log(1-\frac{1}{1+e^{-z}})$部分($z=\theta^Tx$)，我们分别用$cost_1(z)$与$cost_0(z)$函数代替，其中函数如下图：<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note11-2.png" alt><br>支持向量机的代价函数就是下式：<br>$$\min_\theta C\sum_{i=1}^m[-y^{(i)}cost_1(\theta^Tx^{(i)})-(1-y^{(i)})cost_0(\theta^Tx^{(i)})]+\frac{1}{2}\sum_{i=1}^n\theta_j^2$$</p>
 <h4 id="最大间隔"><a href="#最大间隔" class="headerlink" title="最大间隔"></a>最大间隔</h4><p>人们有时将支持向量机看作是大间距分类器。对于$y=1$与$y=0$情况时$\theta^Tx$的要求更为严格，相当于在支持向量机中嵌入了一个安全的间距因子。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note11-1.png" alt></p>
-<p>现在假设C是一个非常大的数例如100,000, 我们看看SVM会有什么结果. 在C非常大的情况下, 我们想要最小化代价函数, 那么就得有第一项为0. 而想要第一项为0, 我们需要保证当$y＝1$的时候$\theta^Tx\geq1$；当$y＝0$的时候$\theta^Tx\leq－1$. 在此约束下, 我们的优化问题就变成了<br>$$\min_\theta\frac{1}{2}\sum_{i=1}^n\theta_j^2\ \ st.\begin{cases}\theta^Tx\geq1\ \ if\ \ y^{(i)}=1\\theta^Tx\leq-1\ \ if\ \ y^{(i)}=0\end{cases}$$<br>此时，SVM会选择一个具有最大间隔的决策边界如下图中的黑线所示, 而不是绿线或者粉线.<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note11-3.png" alt><br>但是，当C非常大时，SVN容易受到异常点的影响. 如下图所示, 对于该数据集, SVM会因为左下角异常点的加入，将决策边界由黑色变更为粉色。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note11-4.png" alt><br>由逻辑回归代价函数类比到SVM假设函数，当$C=\frac{1}{\lambda}$时，有：</p>
+<p>现在假设C是一个非常大的数例如100,000, 我们看看SVM会有什么结果. 在C非常大的情况下, 我们想要最小化代价函数, 那么就得有第一项为0. 而想要第一项为0, 我们需要保证当$y＝1$的时候$\theta^Tx\geq1$；当$y＝0$的时候$\theta^Tx\leq－1$. 在此约束下, 我们的优化问题就变成了<br>$$\min_\theta\frac{1}{2}\sum_{i=1}^n\theta_j^2  st.\begin{cases}\theta^Tx\geq1  if  y^{(i)}=1\\theta^Tx\leq-1  if  y^{(i)}=0\end{cases}$$<br>此时，SVM会选择一个具有最大间隔的决策边界如下图中的黑线所示, 而不是绿线或者粉线.<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note11-3.png" alt><br>但是，当C非常大时，SVN容易受到异常点的影响. 如下图所示, 对于该数据集, SVM会因为左下角异常点的加入，将决策边界由黑色变更为粉色。<br><img src="https://raw.githubusercontent.com/wsczh/wsczh.github.io/master/images/images-in-post/ML-note11-4.png" alt><br>由逻辑回归代价函数类比到SVM假设函数，当$C=\frac{1}{\lambda}$时，有：</p>
 <ul>
 <li>$C$ 较大时，相当于 $\lambda$ 较小，可能会导致过拟合，高方差。</li>
 <li>$C$ 较小时，相当于$\lambda$较大，可能会导致低拟合，高偏差。</li>
@@ -661,7 +661,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

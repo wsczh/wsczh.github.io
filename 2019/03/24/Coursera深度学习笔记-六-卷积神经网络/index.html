@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext">
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"hide","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: true,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="卷积运算与边缘检测在进行模式识别判断图片中的物体时，第一件事一般需要进行检测图片中物体的边缘，再进一步判断物体类别。如下图，右上方为垂直边缘，右下方为水平边缘。那么在图像中如何检测到这些边缘？  下图是一个6x6的灰度图像，即6x6x1的矩阵。为了检测图像中的垂直边缘，可以构造一个3x3的矩阵，如下图。在卷积神经网络术语中，被称为滤波器。对6x6的图像进行卷积运算，卷积运算用’*’表示，用3x3的">
+<meta name="keywords" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coursera深度学习笔记(六) - 卷积神经网络">
+<meta property="og:url" content="https://wsczh.github.io/2019/03/24/Coursera深度学习笔记-六-卷积神经网络/index.html">
+<meta property="og:site_name" content="Wangsc&#39;s Blog">
+<meta property="og:description" content="卷积运算与边缘检测在进行模式识别判断图片中的物体时，第一件事一般需要进行检测图片中物体的边缘，再进一步判断物体类别。如下图，右上方为垂直边缘，右下方为水平边缘。那么在图像中如何检测到这些边缘？  下图是一个6x6的灰度图像，即6x6x1的矩阵。为了检测图像中的垂直边缘，可以构造一个3x3的矩阵，如下图。在卷积神经网络术语中，被称为滤波器。对6x6的图像进行卷积运算，卷积运算用’*’表示，用3x3的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-1.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-2.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-3.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-4.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-5.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-6.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-7.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-8.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-9.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-10.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-11.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-12.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-24.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-25.png">
+<meta property="og:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-26.png">
+<meta property="og:updated_time" content="2019-03-24T11:33:58.022Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Coursera深度学习笔记(六) - 卷积神经网络">
+<meta name="twitter:description" content="卷积运算与边缘检测在进行模式识别判断图片中的物体时，第一件事一般需要进行检测图片中物体的边缘，再进一步判断物体类别。如下图，右上方为垂直边缘，右下方为水平边缘。那么在图像中如何检测到这些边缘？  下图是一个6x6的灰度图像，即6x6x1的矩阵。为了检测图像中的垂直边缘，可以构造一个3x3的矩阵，如下图。在卷积神经网络术语中，被称为滤波器。对6x6的图像进行卷积运算，卷积运算用’*’表示，用3x3的">
+<meta name="twitter:image" content="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wsczh.github.io/2019/03/24/Coursera深度学习笔记-六-卷积神经网络/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Coursera深度学习笔记(六) - 卷积神经网络 | Wangsc's Blog</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=UA-136763172-1"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-136763172-1');
+    }
+  </script>
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1f36baabbf6dee7cc6b7446a41ec5607";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wangsc's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Stay hungry, Stay foolish</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wsczh.github.io/2019/03/24/Coursera深度学习笔记-六-卷积神经网络/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wangsc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wangsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Coursera深度学习笔记(六) - 卷积神经网络
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-24 19:04:39 / 修改时间：19:33:58" itemprop="dateCreated datePublished" datetime="2019-03-24T19:04:39+08:00">2019-03-24</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="卷积运算与边缘检测"><a href="#卷积运算与边缘检测" class="headerlink" title="卷积运算与边缘检测"></a>卷积运算与边缘检测</h2><p>在进行模式识别判断图片中的物体时，第一件事一般需要进行检测图片中物体的边缘，再进一步判断物体类别。如下图，右上方为垂直边缘，右下方为水平边缘。那么在图像中如何检测到这些边缘？</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-1.png" alt></p>
+<p>下图是一个6x6的灰度图像，即6x6x1的矩阵。为了检测图像中的垂直边缘，可以构造一个3x3的矩阵，如下图。在卷积神经网络术语中，被称为滤波器。对6x6的图像进行卷积运算，卷积运算用’*’表示，用3x3的滤波器对其进行卷积。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-2.png" alt></p>
+<p>卷积运算就是将滤波器依次覆盖在图像上进行点乘，例如上图中左上角3x3图像与滤波器做点乘，最后结果为4x4输出的第一个元素。</p>
+<h2 id="更多的边缘检测"><a href="#更多的边缘检测" class="headerlink" title="更多的边缘检测"></a>更多的边缘检测</h2><p>常用的滤波器还有：<br>（1）简单的水平滤波器：即将上面的垂直滤波器旋转90°即可。<br>（2）Sobel滤波器：<br>（3）Scharr过滤器：<br>（4）….</p>
+<h2 id="边缘填充-Padding"><a href="#边缘填充-Padding" class="headerlink" title="边缘填充-Padding"></a>边缘填充-Padding</h2><p>通过数学计算可以得到，如果有一个nxn的图像，用fxf的滤波器做卷积运算，输出的结果将为(n-f+1)x(n-f+1)。</p>
+<p>因此，在进行边缘检测时常出现两个问题：（1）每一次做卷积运算都是将图像缩小。（2）边缘像素点在进行卷积运算时采用次数较少，意味着将丢掉边缘位置很多信息。</p>
+<p>为解决这些问题，常用的解决方法是在进行卷积运算前，对图像进行填充。例如，将6x6图像填充成8x8图像，这样在通过3x3滤波器滤波后输出的是6x6图像。用数学表示为：假定在周围填充了p层边缘，则输出结果为(n+2p-f+1)x(n+2p-f+1)。</p>
+<p>至于算则填充多少像素，通常由两个选择，分别叫做Valid卷积和Same卷积。前者意味着不填充，后者意味着填充后输入输出图像大小一致。</p>
+<h2 id="卷积步长-strided-convolutions"><a href="#卷积步长-strided-convolutions" class="headerlink" title="卷积步长-strided convolutions"></a>卷积步长-strided convolutions</h2><p>卷积步长是另一个构建卷积神经网络的基本操作，具体含义为当前进行运算的位置与下一次运算位置之间的间隔。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-3.png" alt></p>
+<p>此时，假定步长为s，例如本例子中s=2，那么输出矩阵的大小为：((n+2p-f)/s + 1)x((n+2p-f)/s + 1)。如果商不是整数，则进行向下取整。</p>
+<p>总结一下维度情况如下：</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-4.png" alt></p>
+<h2 id="三维卷积"><a href="#三维卷积" class="headerlink" title="三维卷积"></a>三维卷积</h2><p>对于三维图像来说，在进行滤波运算时，滤波器也是3维的。<br>例如三维图像是6x6x3矩阵，滤波器是3x3x3矩阵，那么输出结果为4x4矩阵。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-5.png" alt></p>
+<p>假如，需要获得水平边缘与垂直边缘，则分别对两个滤波器进行卷积运算。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-6.png" alt></p>
+<p>总结维度：nxnxnc的输入图像，与fxfxfc滤波器进行卷积运算，得到( n - f + 1 ) x ( n - f + 1 )x nc’,其中nc’为滤波器的个数。</p>
+<h2 id="单层卷积网络"><a href="#单层卷积网络" class="headerlink" title="单层卷积网络"></a>单层卷积网络</h2><p>对于一层的卷积网络来说，首先由上一层的输出矩阵a^[l-1]与该层的滤波器w^[l]相乘，所得结果加上偏差b^[l]，最后应用激活函数ReLU。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-7.png" alt></p>
+<p>对于l层的各个变量维度如下图：</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-8.png" alt></p>
+<h2 id="简单卷积网络示例"><a href="#简单卷积网络示例" class="headerlink" title="简单卷积网络示例"></a>简单卷积网络示例</h2><p>假设有一张图片，大小是39x39x3。第一层通过10个3x3的滤波器进行滤波，获得37x37x10的矩阵。第二层通过20个5x5的滤波器，步长2的滤波器进行滤波，获得17x17x20的矩阵。第三层…..</p>
+<p>到此，39x39x3的输入图像处理完毕，卷积网络提供了7x7x40个特征。接着对卷积进行处理，将其平滑或展开成1960个单元，处理后输出一个向量。最后添加logistic回归单元或者softmax回归单元。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-9.png" alt></p>
+<h2 id="池化层-pooling-layer"><a href="#池化层-pooling-layer" class="headerlink" title="池化层-pooling layer"></a>池化层-pooling layer</h2><p>除了卷积层，卷积网络也经常使用池化层来缩减模型的大小，提高计算速度。同时提高所提取特征的鲁棒性。</p>
+<p>假如输入是一个4×4矩阵，用到的池化类型是最大池化（max pooling）。执行最大池化的树池是一个2×2矩阵。执行过程非常简单，把4×4的输入拆分成不同的区域。对于2×2的输出，输出的每个元素都是其对应颜色区域中的最大元素值。（步长为2）</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-10.png" alt></p>
+<p>输出矩阵的大小与卷积层输出大小计算相同，即(n+2p-f)/s+1.</p>
+<p>同样还有平均池化，即选取平均值，但不常用。</p>
+<h2 id="为什么使用卷积神经网络"><a href="#为什么使用卷积神经网络" class="headerlink" title="为什么使用卷积神经网络"></a>为什么使用卷积神经网络</h2><p>一是参数共享。特征检测如垂直边缘检测如果适用于图片的某个区域，那么它也可能适用于图片的其他区域。直观感觉是，一个特征检测器，如垂直边缘检测器用于检测图片左上角区域的特征，这个特征很可能也适用于图片的右下角区域。</p>
+<p>二是使用稀疏连接。输出矩阵的每个元素仅仅是通过3×3的卷积计算得到的，它只依赖于其中一个3×3的输入的单元格，其它像素值都不会对该元素产生影响，这就是稀疏连接的概念。</p>
+<p>神经网络可以通过这两种机制减少参数，以便用更小的训练集来训练它，从而预防过度拟合。因此有人称卷积神经网络善于捕捉平移不变。</p>
+<h2 id="残差网络-ResNets"><a href="#残差网络-ResNets" class="headerlink" title="残差网络(ResNets)"></a>残差网络(ResNets)</h2><p>因为存在梯度消失和梯度爆炸问题，非常深的神经网络很难训练。</p>
+<p>跳跃连接：从某一层网络层获取激活，然后迅速反馈给另外一层，甚至是神经网络的更深层。</p>
+<p>对于正常的神经网络来说，$a^[l+1]=g(z^[l+1])$, $a^[l+2]=g(z^[l+2])$.而对于残差网络来说，$a^[l+2]=g(z^[l+2]+ a^[l])$，即加上的$a^[l]$就是一个残差块，他被反馈给了更深的层。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-11.png" alt></p>
+<p>如果使用标准优化算法训练一个普通网络，比如说梯度下降法。如果没有残差，凭经验会发现随着网络深度的加深，训练错误会先减少，然后增多。实际上，随着网络深度的加深，训练错误会越来越多。</p>
+<p>ResNets网络中常使用Same卷积，使得在添加残差块时，z^[l+2]与a^[l]的维度一致。</p>
+<p>普通网络和ResNets网络常用的结构是：卷积层-卷积层-卷积层-池化层-卷积层-卷积层-卷积层-池化层……依此重复。直到最后，有一个通过softmax进行预测的全连接层.</p>
+<h2 id="网络中的网络以及-1×1-卷积"><a href="#网络中的网络以及-1×1-卷积" class="headerlink" title="网络中的网络以及 1×1 卷积"></a>网络中的网络以及 1×1 卷积</h2><p>当过滤器为1×1，输入一张6×6×1的图片，然后对它做卷积，结果相当于把这个图片乘以数字2。这对于通道个数为1个的图片来说，1×1卷积效果不佳。</p>
+<p>如果是一张6×6×32的图片，那么使用1×1过滤器进行卷积效果更好。具体来说，1×1卷积所实现的功能是遍历这36个单元格，计算左图中32个数字和过滤器中32个数字的元素积之和，然后应用ReLU非线性函数。或者说，这32个数字具有不同通道，乘以32个权重（将过滤器中的32个数理解为权重），然后应用ReLU非线性函数。</p>
+<p>所以1×1卷积可以从根本上理解为对这32个不同的位置都应用一个全连接层。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-12.png" alt></p>
+<p>池化层可以压缩输入层的高度与宽度，但是如果通道数量较大时，就需要采用1x1卷积方法。例如，有一个28x28x192的输入层，需要压缩到28x28x32维度，那么就使用32个1x1x192的过滤器进行卷积。</p>
+<p>1×1卷积层就是给神经网络添加了一个非线性函数，从而减少或保持输入层中的通道数量不变。</p>
+<h2 id="迁移学习-Transfer-Learning"><a href="#迁移学习-Transfer-Learning" class="headerlink" title="迁移学习(Transfer Learning)"></a>迁移学习(Transfer Learning)</h2><p>当要做一个计算机视觉应用时，可以把他人训练好的神经网络模型，并将其权重参数当作初始化用在自己的神经网络上。迁移学习就是把公共的数据集知识迁移到自己的问题上。</p>
+<p>例如，要建立一个猫咪检测器，用来检测你自己的宠物猫。比如有三种类别，分别是猫Tigger，猫Misty，两者都不是。那么从网上下载一些神经网络开源的实现，同时下载权重。</p>
+<p>当样本数据较少时，可以仅仅去掉训练好的神经网络的最后softmax层，创建自己的softmax单元，用于输出三个类别。即冻结网络中所有层的参数，只需要训练和Softmax层有关的参数。</p>
+<p>当样本数据较多时，可以仅仅冻结前几层，然后训练后面的层。数据越多，冻结层越少，训练层越多。极端情况下，可以把他人训练好的权重当作初始值，代替随机初始化，进行训练。</p>
+<p>对于迁移学习什么时候有意义？如果你想从任务A学习并迁移一些知识到任务B，那么当任务A和任务B都有同样的输入时，迁移学习是有意义的。当任务A的数据比任务B多得多时，迁移学习意义更大。所有这些假设的前提都是，你希望提高任务B的性能，因为任务B每个数据更有价值，对任务B来说通常任务A的数据量必须大得多，才有帮助，因为任务A里单个样本的价值没有比任务单个样本价值大。</p>
+<h2 id="Inception-网络"><a href="#Inception-网络" class="headerlink" title="Inception 网络"></a>Inception 网络</h2><h3 id="谷歌-Inception-网络简介"><a href="#谷歌-Inception-网络简介" class="headerlink" title="谷歌 Inception 网络简介"></a>谷歌 Inception 网络简介</h3><p>当不确定过滤器大小选取1x1，3x3，还是5x5，或者是否添加池化层时，可以采用Inception网络或者说Inception层。</p>
+<p>基本思想是Inception网络不需要人为决定使用哪个过滤器或者是否需要池化，而是由网络自行确定这些参数，你可以给网络添加这些参数的所有可能值，然后把这些输出连接起来，让网络自己学习它需要什么样的参数，采用哪些过滤器组合。虽然网络架构因此变得更加复杂，但网络表现却非常好。</p>
+<p>具体方法为，对输入图像分别与1x1，3x3…过滤器进行卷积运算，最后将结果堆叠出来。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-24.png" alt></p>
+<p>但是，Inception层有一个问题，就是计算成本。例如上图中，执行一个5x5卷积，有32个过滤器，此时需要执行1.2亿次乘法运算，成本很高。因此这里一般采用一种架构，添加瓶颈层。</p>
+<p>例如，先执行一个1x1卷积，过滤器有16个，生成一个28x28x16的瓶颈层，再对瓶颈层执行5x5卷积，过滤器有32个。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-25.png" alt></p>
+<p>此时，第一个卷积层计算240万，第二层1000万，总共是之前计算成本的十分之一。</p>
+<h3 id="Inception-网络-1"><a href="#Inception-网络-1" class="headerlink" title="Inception 网络"></a>Inception 网络</h3><p>在添加上瓶颈层后，Inception 网络就如下图所示。</p>
+<p><img src="http://wangsc-blog.oss-cn-hangzhou.aliyuncs.com/DeepLearning/note6-26.png" alt></p>
+<p>这里，需要注意，为了将输出都连接起来，会使用same类型的padding来池化，使得最后输出的高与宽依然为28x28.但是注意，若进行最大池化，same padding，3x3过滤器，stride为1，其输出将会是28x28x192。通道数较多，因此最后增加一个1x1卷积层，将通道数量缩小，缩小到28x28x32，即32个维度为1x1x192的过滤器。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/深度学习/" rel="tag"># 深度学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/24/Coursera深度学习笔记-五-结构化机器学习项目/" rel="next" title="Coursera深度学习笔记(五) - 结构化机器学习项目">
+                <i class="fa fa-chevron-left"></i> Coursera深度学习笔记(五) - 结构化机器学习项目
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/24/Coursera深度学习笔记-七-目标检测/" rel="prev" title="Coursera深度学习笔记(七) - 目标检测">
+                Coursera深度学习笔记(七) - 目标检测 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+            <a href="/">
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Wangsc">
+            </a>    
+            
+              <p class="site-author-name" itemprop="name">Wangsc</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wsczh" title="GitHub &rarr; https://github.com/wsczh" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:1998wsc@gmail.com" title="E-Mail &rarr; mailto:1998wsc@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积运算与边缘检测"><span class="nav-number">1.</span> <span class="nav-text">卷积运算与边缘检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多的边缘检测"><span class="nav-number">2.</span> <span class="nav-text">更多的边缘检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#边缘填充-Padding"><span class="nav-number">3.</span> <span class="nav-text">边缘填充-Padding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积步长-strided-convolutions"><span class="nav-number">4.</span> <span class="nav-text">卷积步长-strided convolutions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三维卷积"><span class="nav-number">5.</span> <span class="nav-text">三维卷积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单层卷积网络"><span class="nav-number">6.</span> <span class="nav-text">单层卷积网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单卷积网络示例"><span class="nav-number">7.</span> <span class="nav-text">简单卷积网络示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#池化层-pooling-layer"><span class="nav-number">8.</span> <span class="nav-text">池化层-pooling layer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么使用卷积神经网络"><span class="nav-number">9.</span> <span class="nav-text">为什么使用卷积神经网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#残差网络-ResNets"><span class="nav-number">10.</span> <span class="nav-text">残差网络(ResNets)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络中的网络以及-1×1-卷积"><span class="nav-number">11.</span> <span class="nav-text">网络中的网络以及 1×1 卷积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迁移学习-Transfer-Learning"><span class="nav-number">12.</span> <span class="nav-text">迁移学习(Transfer Learning)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inception-网络"><span class="nav-number">13.</span> <span class="nav-text">Inception 网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#谷歌-Inception-网络简介"><span class="nav-number">13.1.</span> <span class="nav-text">谷歌 Inception 网络简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inception-网络-1"><span class="nav-number">13.2.</span> <span class="nav-text">Inception 网络</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wangsc</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66300625";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+  <script src="/js/src/js.cookie.js?v=7.0.1"></script>
+  <script src="/js/src/scroll-cookie.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
